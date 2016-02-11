@@ -1,4 +1,5 @@
 var google;
+var geocoder;
 var map;
 
 var model = {
@@ -32,11 +33,27 @@ var model = {
 
 function initMap() {
      'use strict';
+     geocoder = new google.maps.Geocoder();
      map = new google.maps.Map(document.getElementById('map'), {
           center: {
                lat: 45,
                lng: -71.6711963
           },
           zoom: 10
+     });
+}
+
+function codeAddresses() {
+     'use strict';
+     model.localBusiness.forEach(function (business) {
+          business.geocode = {};
+          geocoder.geocode({'address': business.address}, function (results, status) {
+               if (status === google.maps.GeocoderStatus.OK) {
+                    business.geocode.lat = results[0].geometry.location.lat();
+                    business.geocode.lng = results[0].geometry.location.lng();
+               } else {
+                    business.geocode = false;
+               }
+          });
      });
 }
