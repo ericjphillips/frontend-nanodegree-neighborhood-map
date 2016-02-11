@@ -57,3 +57,14 @@ function codeAddresses() {
           });
      });
 }
+
+function addMarkers() {
+     'use strict';
+     model.localBusiness.forEach(function (business) {
+          business.marker = new google.maps.Marker({
+               position: business.geocode,
+               map: map,
+               title: business.name
+          });
+     });
+}
