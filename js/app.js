@@ -2,62 +2,7 @@ var google;
 var geocoder;
 var map;
 
-var model = {
-	center: {lat: 44.2035, lng: -72.5623},
-	localBusiness: [{
-		'name': 'Buck Rub Pub',
-		'address': '2253 North Main Street, Pittsburg, NH',
-		'type': 'Restaurant'
-	}, {
-		'name': 'Dancing Bear Pub',
-		'address': '151 Main Street, Colebrook, NH',
-		'type': 'Restaurant'
-	}, {
-		'name': 'Spa Restaurant & Outback Pub',
-		'address': '869 Washington Street, West Stewartstown, NH',
-		'type': 'Restaurant'
-	}, {
-		'name': 'Timeout Tavern Sports Bar / Northland Restaurant',
-		'address': '114 Gale Street, Canaan, VT',
-		'type': 'Restaurant'
-	}, {
-		'name': 'Bear Rock Adventures',
-		'address': '545 Beach Road, Pittsburg, NH',
-		'type': 'Recreation'
-	}, {
-		'name': 'Let\'s Ride Rentals',
-		'address': '978 Diamond Pond Road, Stewartstown, NH',
-		'type': 'Recreation'
-	}
-		]
-};
-
-function codeAddresses() {
-	'use strict';
-	geocoder = new google.maps.Geocoder();
-	model.localBusiness.forEach(function (business) {
-		business.geocode = {};
-		geocoder.geocode({'address': business.address}, function (results, status) {
-			if (status === google.maps.GeocoderStatus.OK) {
-				business.geocode.lat = results[0].geometry.location.lat();
-				business.geocode.lng = results[0].geometry.location.lng();
-			} else {
-				business.geocode = false;
-			}
-		});
-	});
-}
-
-function addMarkers() {
-	'use strict';
-	model.localBusiness.forEach(function (business) {
-		business.marker = new google.maps.Marker({
-			position: business.geocode,
-			map: map,
-			title: business.name
-		});
-	});
-}
+var model = {center: {lat: 44.2035, lng: -72.5623}};
 
 function initMap() {
 	'use strict';
@@ -65,8 +10,6 @@ function initMap() {
 		center: model.center,
 		zoom: 8
 	});
-	codeAddresses();
-	addMarkers();
 }
 
 /*
