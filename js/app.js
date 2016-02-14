@@ -11,13 +11,13 @@ function callback(results, status) {
 	}
 }
 
-function loadBreweries(searchTerms) {
+function loadBreweries() {
 	'use strict';
-	var service, request, keywords = searchTerms.join(' ');
+	var service, request;
 	service = new google.maps.places.PlacesService(map);
 	request = {
 		bounds: map.getBounds(),
-		keyword: keywords
+		keyword: 'Vermont brewery'
 	};
 	service.radarSearch(request, callback);
 }
@@ -28,4 +28,5 @@ function initMap() {
 		center: model.center,
 		zoom: 8
 	});
+	map.addListener('idle', loadBreweries);
 }
