@@ -3,8 +3,24 @@ body {
 	height: 100%;
 	padding: 0;
 	margin: 0;
+	position: relative;
+}
+
+#map,
+#sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 #map {
 	height: 100%;
+	width: 100%;
+}
+
+#sidebar {
+	height: 100%;
+	width: 30%;
+	background-color: #FFF;
+	z-index: 1;
 }
