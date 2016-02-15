@@ -5,7 +5,16 @@ var viewModel = {
 		lat: 44.2035,
 		lng: -72.5623
 	},
-	brewery: ko.observableArray()
+	brewery: ko.observableArray(),
+	infowindow: {},
+	moveInfoWindow: function () {
+		'use strict';
+		viewModel.infowindow.setOptions({
+			content: this.name,
+			position: this.geometry.location
+		});
+		viewModel.infowindow.open(map);
+	}
 };
 
 ko.applyBindings(viewModel);
@@ -22,15 +31,20 @@ function initMap() {
 
 	service = new google.maps.places.PlacesService(map);
 
+	viewModel.infowindow = new google.maps.InfoWindow({
+		content: ''
+	});
+
 	function detailedCallback(place, status) {
 		if (status === google.maps.places.PlacesServiceStatus.OK) {
 			if (place.address_components[3].short_name === 'VT') {
-				viewModel.brewery.push(place);
-				var marker = new google.maps.Marker({
+				place.marker = new google.maps.Marker({
 					position: place.geometry.location,
 					map: map,
 					title: place.name
 				});
+				place.marker.addListener('click', viewModel.moveInfoWindow.bind(place));
+				viewModel.brewery.push(place);
 			}
 		}
 	}
