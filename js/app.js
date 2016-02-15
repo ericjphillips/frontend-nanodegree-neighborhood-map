@@ -49,6 +49,7 @@ function initMap() {
 			keyword: 'brewery'
 		};
 		service.radarSearch(request, callback);
+		google.maps.event.clearListeners(map, 'idle');
 	}
 
 	map.addListener('idle', loadBreweries);
