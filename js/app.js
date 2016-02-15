@@ -20,7 +20,9 @@ function initMap() {
 
 	function detailedCallback(place, status) {
 		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			model.breweries.push(place);
+			if (place.address_components[3].short_name === 'VT') {
+				model.breweries.push(place);
+			}
 		}
 	}
 
@@ -35,7 +37,7 @@ function initMap() {
 	function loadBreweries() {
 		var request = {
 			bounds: map.getBounds(),
-			keyword: 'Vermont brewery'
+			keyword: 'brewery'
 		};
 		service.radarSearch(request, callback);
 	}
