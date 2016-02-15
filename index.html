@@ -9,7 +9,9 @@
 <body>
 	<div id="sidebar">
 		<ul id="list-view" data-bind="foreach: brewery">
-			<li data-bind="text: name"></li>
+			<li>
+				<a href="#" data-bind="text: name"></a>
+			</li>
 		</ul>
 	</div>
 	<div id="map"></div>
