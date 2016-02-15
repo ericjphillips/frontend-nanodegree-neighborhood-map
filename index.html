@@ -8,8 +8,8 @@
 
 <body>
 	<div id="sidebar">
-		<ul id="breweries">
-			<li>Test</li>
+		<ul id="list-view" data-bind="foreach: brewery">
+			<li data-bind="text: name"></li>
 		</ul>
 	</div>
 	<div id="map"></div>

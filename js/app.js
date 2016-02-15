@@ -1,18 +1,22 @@
 var google, map, service, ko;
 
-var model = {
+var viewModel = {
 	center: {
 		lat: 44.2035,
 		lng: -72.5623
 	},
-	breweries: ko.observableArray()
+	brewery: ko.observableArray()
 };
 
+ko.applyBindings(viewModel);
+
+//Google Maps callback function
+//Executes when async response completes
 function initMap() {
 	'use strict';
 
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: model.center,
+		center: viewModel.center,
 		zoom: 8
 	});
 
@@ -21,7 +25,7 @@ function initMap() {
 	function detailedCallback(place, status) {
 		if (status === google.maps.places.PlacesServiceStatus.OK) {
 			if (place.address_components[3].short_name === 'VT') {
-				model.breweries.push(place);
+				viewModel.brewery.push(place);
 				var marker = new google.maps.Marker({
 					position: place.geometry.location,
 					map: map,
