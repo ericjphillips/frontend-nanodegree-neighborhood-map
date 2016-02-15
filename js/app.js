@@ -1,11 +1,11 @@
-var google, map, service;
+var google, map, service, ko;
 
 var model = {
 	center: {
 		lat: 44.2035,
 		lng: -72.5623
 	},
-	breweries: []
+	breweries: ko.observableArray()
 };
 
 function initMap() {
