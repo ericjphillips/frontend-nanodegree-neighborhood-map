@@ -22,6 +22,11 @@ function initMap() {
 		if (status === google.maps.places.PlacesServiceStatus.OK) {
 			if (place.address_components[3].short_name === 'VT') {
 				model.breweries.push(place);
+				var marker = new google.maps.Marker({
+					position: place.geometry.location,
+					map: map,
+					title: place.name
+				});
 			}
 		}
 	}
