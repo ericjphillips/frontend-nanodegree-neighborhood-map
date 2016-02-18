@@ -20,7 +20,7 @@ var viewModel = {
 ko.applyBindings(viewModel);
 
 //Google Maps callback function
-//Executes when async response completes
+//executes when async response completes
 function initMap() {
 	'use strict';
 
@@ -37,41 +37,12 @@ function initMap() {
 
 }
 
-
-
-//*$.ajax({
-
-// The 'type' property sets the HTTP method.
-// A value of 'PUT' or 'DELETE' will trigger a preflight request.
-type: 'GET',
-
+$.ajax({
+	type: 'GET',
 	dataType: 'json',
 
-	// The URL to make the request to.
-	url: 'https://api.brewerydb.com/v2/locations?region=Vermont&key=47f825b1668bd879c371d39ec0abbcf4&format=json',
-
-	// The 'contentType' property sets the 'Content-Type' header.
-	// The JQuery default for this property is
-	// 'application/x-www-form-urlencoded; charset=UTF-8', which does not trigger
-	// a preflight. If you set this value to anything other than
-	// application/x-www-form-urlencoded, multipart/form-data, or text/plain,
-	// you will trigger a preflight request.
-	contentType: 'text/plain',
-
-	xhrFields: {
-		// The 'xhrFields' property sets additional fields on the XMLHttpRequest.
-		// This can be used to set the 'withCredentials' property.
-		// Set the value to 'true' if you'd like to pass cookies to the server.
-		// If this is enabled, your server must respond with the header
-		// 'Access-Control-Allow-Credentials: true'.
-		withCredentials: true
-	},
-
-	headers: {
-		// Set any custom headers here.
-		// If you set any non-simple headers, your server must include these
-		// headers in the 'Access-Control-Allow-Headers' response header.
-	},
+	// the client makes a request to the Node.js server, which does the actual request to BreweryDB
+	url: '/brewDB/',
 
 	success: function (response) {
 		// Here's where you handle a successful response.
@@ -80,10 +51,7 @@ type: 'GET',
 	},
 
 	error: function () {
-		// Here's where you handle an error response.
-		// Note that if the error was due to a CORS issue,
-		// this function will still fire, but there won't be any additional
-		// information about the error.
 		'use strict';
+		console.log('Oh no. No brewery data :-(');
 	}
-}); * //
+});
