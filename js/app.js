@@ -39,11 +39,11 @@ function initMap() {
 
 
 
-$.ajax({
+/*$.ajax({
 
-	// The 'type' property sets the HTTP method.
-	// A value of 'PUT' or 'DELETE' will trigger a preflight request.
-	type: 'GET',
+// The 'type' property sets the HTTP method.
+// A value of 'PUT' or 'DELETE' will trigger a preflight request.
+type: 'GET',
 
 	dataType: 'json',
 
@@ -89,3 +89,4 @@ $.ajax({
 		'use strict';
 	}
 });
+*/
