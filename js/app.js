@@ -39,7 +39,7 @@ function initMap() {
 
 
 
-/*$.ajax({
+//*$.ajax({
 
 // The 'type' property sets the HTTP method.
 // A value of 'PUT' or 'DELETE' will trigger a preflight request.
@@ -88,5 +88,4 @@ type: 'GET',
 		// information about the error.
 		'use strict';
 	}
-});
-*/
+}); * //
