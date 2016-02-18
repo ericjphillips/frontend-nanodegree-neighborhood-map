@@ -1,4 +1,4 @@
-var google, map, service, ko;
+var console, $, google, map, service, ko;
 
 var viewModel = {
 	center: {
@@ -10,8 +10,8 @@ var viewModel = {
 	moveInfoWindow: function () {
 		'use strict';
 		viewModel.infowindow.setOptions({
-			content: this.name,
-			position: this.geometry.location
+			content: '',
+			position: ''
 		});
 		viewModel.infowindow.open(map);
 	}
@@ -35,36 +35,57 @@ function initMap() {
 		content: ''
 	});
 
-	function detailedCallback(place, status) {
-		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			if (place.address_components[3].short_name === 'VT') {
-				place.marker = new google.maps.Marker({
-					position: place.geometry.location,
-					map: map,
-					title: place.name
-				});
-				place.marker.addListener('click', viewModel.moveInfoWindow.bind(place));
-				viewModel.brewery.push(place);
-			}
-		}
-	}
-
-	function callback(results, status) {
-		if (status === google.maps.places.PlacesServiceStatus.OK) {
-			results.forEach(function (place) {
-				service.getDetails(place, detailedCallback);
-			});
-		}
-	}
-
-	function loadBreweries() {
-		var request = {
-			bounds: map.getBounds(),
-			keyword: 'brewery'
-		};
-		service.radarSearch(request, callback);
-		google.maps.event.clearListeners(map, 'idle');
-	}
-
-	map.addListener('idle', loadBreweries);
 }
+
+
+
+$.ajax({
+
+	// The 'type' property sets the HTTP method.
+	// A value of 'PUT' or 'DELETE' will trigger a preflight request.
+	type: 'GET',
+
+	dataType: 'json',
+
+	// The URL to make the request to.
+	url: 'https://api.brewerydb.com/v2/locations?region=Vermont&key=47f825b1668bd879c371d39ec0abbcf4&format=json',
+
+	crossDoman: true,
+
+	// The 'contentType' property sets the 'Content-Type' header.
+	// The JQuery default for this property is
+	// 'application/x-www-form-urlencoded; charset=UTF-8', which does not trigger
+	// a preflight. If you set this value to anything other than
+	// application/x-www-form-urlencoded, multipart/form-data, or text/plain,
+	// you will trigger a preflight request.
+	contentType: 'text/plain',
+
+	xhrFields: {
+		// The 'xhrFields' property sets additional fields on the XMLHttpRequest.
+		// This can be used to set the 'withCredentials' property.
+		// Set the value to 'true' if you'd like to pass cookies to the server.
+		// If this is enabled, your server must respond with the header
+		// 'Access-Control-Allow-Credentials: true'.
+		withCredentials: true
+	},
+
+	headers: {
+		// Set any custom headers here.
+		// If you set any non-simple headers, your server must include these
+		// headers in the 'Access-Control-Allow-Headers' response header.
+	},
+
+	success: function (response) {
+		// Here's where you handle a successful response.
+		'use strict';
+		console.log(response);
+	},
+
+	error: function () {
+		// Here's where you handle an error response.
+		// Note that if the error was due to a CORS issue,
+		// this function will still fire, but there won't be any additional
+		// information about the error.
+		'use strict';
+	}
+});
