@@ -50,8 +50,6 @@ type: 'GET',
 	// The URL to make the request to.
 	url: 'https://api.brewerydb.com/v2/locations?region=Vermont&key=47f825b1668bd879c371d39ec0abbcf4&format=json',
 
-	crossDoman: true,
-
 	// The 'contentType' property sets the 'Content-Type' header.
 	// The JQuery default for this property is
 	// 'application/x-www-form-urlencoded; charset=UTF-8', which does not trigger
