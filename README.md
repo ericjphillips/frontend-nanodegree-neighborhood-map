@@ -5,10 +5,13 @@ This is a single page application integrating information from several third-par
 ### Required Software
 Using this app requires [Node.js](https://nodejs.org/en/). We will be running our own local server to serve the page and to make requests to BreweryDB.
 ### Installation
-Clone the repository from Github: `$ git clone https://github.com/ericjphillips/frontend-nanodegree-neighborhood-map.git`
-From the project directory, install the required Node packages: `$ npm install`
+Clone the repository from Github:
+`$ git clone https://github.com/ericjphillips/frontend-nanodegree-neighborhood-map.git`
+From the project directory, install the required Node packages:
+`$ npm install`
 ### Starting the Server
-To start the server with its default settings: `$ node index.js`
+To start the server with its default settings:
+`$ node index.js`
 This will create a local server on port 8080.
 ### Loading the Application
 In your browser's address bar, enter `localhost:8080` to access our local server.
