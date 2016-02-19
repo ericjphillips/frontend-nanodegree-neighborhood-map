@@ -7,10 +7,25 @@ var viewModel = {
 	},
 	brewery: ko.observableArray(),
 	infowindow: {},
+	infoWindowContentConstructor: function (brewery) {
+		'use strict';
+		var content = '';
+		content += '<h1>' + brewery.brewery.name + '</h1>';
+		if (brewery.brewery.hasOwnProperty('established')) {
+			content += '<p> est. ' + brewery.brewery.established + '</p>';
+		}
+		if (brewery.hasOwnProperty('website')) {
+			content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
+		}
+		if (brewery.brewery.hasOwnProperty('description')) {
+			content += '<p>' + brewery.brewery.description + '</p>';
+		}
+		return content;
+	},
 	moveInfoWindow: function () {
 		'use strict';
 		viewModel.infowindow.setOptions({
-			content: this.brewery.name,
+			content: this.infoWindowContent,
 			position: {
 				lat: this.latitude,
 				lng: this.longitude
@@ -42,6 +57,7 @@ $.ajax({
 				map: map,
 				title: brewery.brewery.name
 			});
+			brewery.infoWindowContent = viewModel.infoWindowContentConstructor(brewery);
 			brewery.marker.addListener('click', viewModel.moveInfoWindow.bind(brewery));
 			viewModel.brewery.push(brewery);
 		});
