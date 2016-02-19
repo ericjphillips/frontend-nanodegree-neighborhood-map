@@ -37,6 +37,7 @@ var viewModel = {
 
 ko.applyBindings(viewModel);
 
+//AJAX request to breweryDB
 $.ajax({
 	type: 'GET',
 	dataType: 'json',
