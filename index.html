@@ -10,7 +10,7 @@
 	<div id="sidebar">
 		<ul id="list-view" data-bind="foreach: brewery">
 			<li>
-				<a href="#" data-bind="text: name"></a>
+				<a href="#" data-bind="text: brewery.name, click: $parent.moveInfoWindow"></a>
 			</li>
 		</ul>
 	</div>
