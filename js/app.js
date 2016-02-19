@@ -66,7 +66,7 @@ $.ajax({
 
 	error: function () {
 		'use strict';
-		console.log('Oh no. No brewery data :-(');
+		console.log('Oh no. No brewery data available :-(');
 	}
 });
 
@@ -85,3 +85,5 @@ function initMap() {
 	});
 
 }
+
+//practice AJAX calls to untappd
