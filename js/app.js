@@ -1,4 +1,4 @@
-var console, $, google, map, service, ko;
+var console, $, google, map, ko;
 
 var viewModel = {
 	center: {
@@ -10,32 +10,17 @@ var viewModel = {
 	moveInfoWindow: function () {
 		'use strict';
 		viewModel.infowindow.setOptions({
-			content: '',
-			position: ''
+			content: this.brewery.name,
+			position: {
+				lat: this.latitude,
+				lng: this.longitude
+			}
 		});
 		viewModel.infowindow.open(map);
 	}
 };
 
 ko.applyBindings(viewModel);
-
-//Google Maps callback function
-//executes when async response completes
-function initMap() {
-	'use strict';
-
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: viewModel.center,
-		zoom: 8
-	});
-
-	service = new google.maps.places.PlacesService(map);
-
-	viewModel.infowindow = new google.maps.InfoWindow({
-		content: ''
-	});
-
-}
 
 $.ajax({
 	type: 'GET',
@@ -48,6 +33,18 @@ $.ajax({
 		// Here's where you handle a successful response.
 		'use strict';
 		console.log(response);
+		response.data.forEach(function (brewery) {
+			brewery.marker = new google.maps.Marker({
+				position: {
+					lat: brewery.latitude,
+					lng: brewery.longitude
+				},
+				map: map,
+				title: brewery.brewery.name
+			});
+			brewery.marker.addListener('click', viewModel.moveInfoWindow.bind(brewery));
+			viewModel.brewery.push(brewery);
+		});
 	},
 
 	error: function () {
@@ -55,3 +52,19 @@ $.ajax({
 		console.log('Oh no. No brewery data :-(');
 	}
 });
+
+//Google Maps callback function
+//executes when async response completes
+function initMap() {
+	'use strict';
+
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: viewModel.center,
+		zoom: 8
+	});
+
+	viewModel.infowindow = new google.maps.InfoWindow({
+		content: ''
+	});
+
+}
