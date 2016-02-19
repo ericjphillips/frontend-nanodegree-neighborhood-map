@@ -2,7 +2,7 @@ var console, $, google, map, ko;
 
 var viewModel = {
 	center: {
-		lat: 44.2035,
+		lat: 43.9753,
 		lng: -72.5623
 	},
 	brewery: ko.observableArray(),
