@@ -6,22 +6,28 @@ body {
 	position: relative;
 }
 
-#map,
-#sidebar {
+#map {
+	height: 91%;
+	width: 78%;
 	position: absolute;
-	top: 0;
+	top: 9%;
+	left: 22%;
+}
+
+#sidebar {
+	height: 91%;
+	width: 22%;
+	background-color: #FFF;
+	overflow: scroll;
+	position: absolute;
+	top: 9%;
 	left: 0;
 }
 
-#map {
-	height: 100%;
+#searchbar {
+	height: 9%;
 	width: 100%;
-}
-
-#sidebar {
-	height: 100%;
-	width: 30%;
-	background-color: #FFF;
-	overflow: scroll;
-	z-index: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
