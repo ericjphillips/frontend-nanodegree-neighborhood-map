@@ -86,4 +86,14 @@ function initMap() {
 
 }
 
-//practice AJAX calls to untappd
+//practice nested AJAX calls to Untappd
+var searchResuts, breweryDetails;
+$.getJSON('/untappd/search?q=Citizen Cider', function (search) {
+	'use strict';
+	searchResuts = search;
+	console.log(searchResuts);
+	$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
+		breweryDetails = details;
+		console.log(breweryDetails);
+	});
+});
