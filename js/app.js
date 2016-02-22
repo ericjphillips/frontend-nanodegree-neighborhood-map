@@ -7,37 +7,38 @@ var viewModel = {
 	},
 	brewery: ko.observableArray(),
 	infowindow: {},
-	infoWindowContentConstructor: function (brewery) {
+	infoWindowChange: function (brewery) {
 		'use strict';
-		var content = '';
-		content += '<h1>' + brewery.brewery.name + '</h1>';
-		if (brewery.brewery.hasOwnProperty('established')) {
-			content += '<p> est. ' + brewery.brewery.established + '</p>';
-		}
-		if (brewery.hasOwnProperty('website')) {
-			content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
-		}
-		if (brewery.brewery.hasOwnProperty('description')) {
-			content += '<p>' + brewery.brewery.description + '</p>';
-		}
-		return content;
-	},
-	moveInfoWindow: function () {
-		'use strict';
-		viewModel.infowindow.setOptions({
-			content: this.infoWindowContent,
-			position: {
-				lat: this.latitude,
-				lng: this.longitude
-			}
+		//Two calls to Untappd: a search for the brewery, then details for the top result
+		$.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
+			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
+				console.log(details);
+				var content = '';
+				brewery.untappd = details.response.brewery;
+				content += '<img src="' + brewery.untappd.brewery_label + '">';
+				content += '<h1>' + brewery.brewery.name + '</h1>';
+				if (brewery.brewery.hasOwnProperty('established')) {
+					content += '<p> est. ' + brewery.brewery.established + '</p>';
+				}
+				if (brewery.hasOwnProperty('website')) {
+					content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
+				}
+				if (brewery.brewery.hasOwnProperty('description')) {
+					content += '<p>' + brewery.brewery.description + '</p>';
+				}
+				viewModel.infowindow.setOptions({
+					content: content,
+					position: brewery.marker.position
+				});
+				viewModel.infowindow.open(map);
+			});
 		});
-		viewModel.infowindow.open(map);
 	}
 };
 
 ko.applyBindings(viewModel);
 
-//AJAX request to breweryDB
+//AJAX request to breweryDB for all breweries in the state of Vermont
 $.ajax({
 	type: 'GET',
 	dataType: 'json',
@@ -58,8 +59,10 @@ $.ajax({
 				map: map,
 				title: brewery.brewery.name
 			});
-			brewery.infoWindowContent = viewModel.infoWindowContentConstructor(brewery);
-			brewery.marker.addListener('click', viewModel.moveInfoWindow.bind(brewery));
+			//brewery.infoWindowContent = viewModel.infoWindowContentConstructor(brewery);
+			brewery.marker.addListener('click', function () {
+				viewModel.infoWindowChange(brewery);
+			});
 			viewModel.brewery.push(brewery);
 		});
 	},
@@ -85,15 +88,3 @@ function initMap() {
 	});
 
 }
-
-//practice nested AJAX calls to Untappd
-var searchResuts, breweryDetails;
-$.getJSON('/untappd/search?q=Citizen Cider', function (search) {
-	'use strict';
-	searchResuts = search;
-	console.log(searchResuts);
-	$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
-		breweryDetails = details;
-		console.log(breweryDetails);
-	});
-});
