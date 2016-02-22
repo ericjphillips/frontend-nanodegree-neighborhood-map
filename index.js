@@ -29,7 +29,6 @@ server.all('/brewDB/', function (req, res) {
 	console.log('AJAX request made to BreweryDB');
 	req.pipe(request({
 		url: brewerydbURL,
-		qs: req.query,
 		method: req.method
 	})).pipe(res);
 });
@@ -47,7 +46,6 @@ server.all('/untappd/search/', function (req, res) {
 server.all('/untappd/brewery/', function (req, res) {
 	'use strict';
 	var url = 'https://api.untappd.com/v4/brewery/info/' + req.query.brewery_id + '?client_id=' + untappdOAuth.client_id + '&client_secret=' + untappdOAuth.client_secret;
-	console.log('AJAX request made to Untappd for the following brewery ID: ' + req.query.brewery_id + ' @ ' + url);
 	req.pipe(request({
 		url: url,
 		method: req.method
