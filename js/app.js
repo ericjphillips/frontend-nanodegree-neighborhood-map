@@ -12,21 +12,21 @@ var viewModel = {
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	//Two calls to Untappd: a search for the brewery, then details for the top result
-	$.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
+	$.getJSON('/untappd/search?q=' + brewery.name, function (search) {
 		$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
 			console.log(details);
 			var content = '';
 			brewery.untappd = details.response.brewery;
 			content += '<img src="' + brewery.untappd.brewery_label + '">';
-			content += '<h1>' + brewery.brewery.name + '</h1>';
-			if (brewery.brewery.hasOwnProperty('established')) {
-				content += '<p> est. ' + brewery.brewery.established + '</p>';
+			content += '<h1>' + brewery.name + '</h1>';
+			if (brewery.hasOwnProperty('established')) {
+				content += '<p> est. ' + brewery.established + '</p>';
 			}
 			if (brewery.hasOwnProperty('website')) {
 				content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
 			}
-			if (brewery.brewery.hasOwnProperty('description')) {
-				content += '<p>' + brewery.brewery.description + '</p>';
+			if (brewery.hasOwnProperty('description')) {
+				content += '<p>' + brewery.description + '</p>';
 			}
 			viewModel.infowindow.setOptions({
 				content: content,
@@ -50,18 +50,19 @@ $.ajax({
 		'use strict';
 		console.log(response);
 		response.data.forEach(function (brewery) {
-			brewery.marker = new google.maps.Marker({
+			var model = brewery.brewery;
+			model.marker = new google.maps.Marker({
 				position: {
 					lat: brewery.latitude,
 					lng: brewery.longitude
 				},
 				map: map,
-				title: brewery.brewery.name
+				title: brewery.name
 			});
-			brewery.marker.addListener('click', function () {
-				viewModel.infoWindowChange(brewery);
+			model.marker.addListener('click', function () {
+				viewModel.infoWindowChange(model);
 			});
-			viewModel.brewery.push(brewery);
+			viewModel.brewery.push(model);
 		});
 	},
 
