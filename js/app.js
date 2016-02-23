@@ -9,6 +9,11 @@ var viewModel = {
 	infowindow: {}
 };
 
+// method to move the map's infowindow and update its content.
+// takes a brewery as an argument
+// makes a call to Untappd for more detailed information
+// assembles infowindow content from available information
+// uses the infoWindow setOptions method to change its content and position, then opens it on the map
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	//Two calls to Untappd: a search for the brewery, then details for the top result
@@ -37,7 +42,7 @@ viewModel.infoWindowChange = function (brewery) {
 	});
 };
 
-//AJAX request to breweryDB for all breweries in the state of Vermont
+// AJAX request to BreweryDB for all breweries in the state of Vermont
 $.ajax({
 	type: 'GET',
 	dataType: 'json',
@@ -46,7 +51,11 @@ $.ajax({
 	url: '/brewDB/',
 
 	success: function (response) {
-		// Here's where you handle a successful response.
+		// Here's where we handle a successful response.
+		// Iterates through the response and builds a model object for each brewery.
+		// Adds a Google Maps marker with event listener to each.
+		// Pushes the model to the viewModel observable array.
+		// Checks if that was the last brewery in the array, and if so performs a sort on the viewModel data.
 		'use strict';
 		console.log(response);
 		response.data.forEach(function (brewery) {
@@ -77,8 +86,8 @@ $.ajax({
 	}
 });
 
-//Google Maps callback function
-//executes when async response completes
+// Google Maps callback function
+// Executes when async response completes
 function initMap() {
 	'use strict';
 
@@ -93,5 +102,5 @@ function initMap() {
 
 }
 
-//apply bindings
+// apply bindings
 ko.applyBindings(viewModel);
