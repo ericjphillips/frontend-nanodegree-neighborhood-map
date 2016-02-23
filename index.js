@@ -12,7 +12,7 @@ server.listen(server.get('port'), function () {
 });
 
 //URL string pointing to the BreweryDB API, querying for all Vermont breweries
-var brewerydbURL = 'https://api.brewerydb.com/v2/locations?region=Vermont&key=47f825b1668bd879c371d39ec0abbcf4&format=json';
+var brewerydbURL = 'https://api.brewerydb.com/v2/locations?region=Vermont&order=name&sort=ASC&key=47f825b1668bd879c371d39ec0abbcf4&format=json';
 
 var untappdOAuth = {
 	client_id: '33F245D792EDB200715AC09193096EE41450F51F',
