@@ -63,6 +63,11 @@ $.ajax({
 				viewModel.infoWindowChange(model);
 			});
 			viewModel.brewery.push(model);
+			if (response.data.indexOf(brewery) === response.data.length - 1) {
+				viewModel.brewery.sort(function (left, right) {
+					return left.name === right.name ? 0 : (left.name < right.name ? -1 : 1);
+				});
+			}
 		});
 	},
 
