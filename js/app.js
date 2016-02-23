@@ -59,7 +59,6 @@ $.ajax({
 				map: map,
 				title: brewery.brewery.name
 			});
-			//brewery.infoWindowContent = viewModel.infoWindowContentConstructor(brewery);
 			brewery.marker.addListener('click', function () {
 				viewModel.infoWindowChange(brewery);
 			});
