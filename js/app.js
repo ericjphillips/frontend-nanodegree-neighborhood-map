@@ -35,7 +35,7 @@ viewModel.infoWindowChange = function (brewery) {
 			viewModel.infowindow.open(map);
 		});
 	});
-}
+};
 
 //AJAX request to breweryDB for all breweries in the state of Vermont
 $.ajax({
