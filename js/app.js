@@ -13,7 +13,7 @@ var viewModel = {
 // takes a brewery as an argument
 // makes a call to Untappd for more detailed information
 // assembles infowindow content from available information
-// uses the infoWindow setOptions method to change its content and position, then opens it on the map
+// uses the infoWindow setOptions method to change its content and position, then open it on the map
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	//Two calls to Untappd: a search for the brewery, then details for the top result
@@ -28,12 +28,23 @@ viewModel.infoWindowChange = function (brewery) {
 				if (brewery.hasOwnProperty('established')) {
 					content += '<p> est. ' + brewery.established + '</p>';
 				}
-				if (brewery.hasOwnProperty('website')) {
-					content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
-				}
 				if (brewery.hasOwnProperty('description')) {
 					content += '<p>' + brewery.description + '</p>';
 				}
+				content += '<p>';
+				if (brewery.hasOwnProperty('website')) {
+					content += '<a href="' + brewery.website + '" target="_blank">' + brewery.website + '</a> ';
+				}
+				if (brewery.untappd.contact.facebook.length > 0) {
+					content += '<a href="' + brewery.untappd.contact.facebook + '" target="_blank"><i class="fa fa-facebook-official"></i></a> ';
+				}
+				if (brewery.untappd.contact.instagram.length > 0) {
+					content += '<a href="https://www.instagram.com/' + brewery.untappd.contact.instagram + '" target="_blank"><i class="fa fa-instagram"></i></a> ';
+				}
+				if (brewery.untappd.contact.twitter.length > 0) {
+					content += '<a href="https://twitter.com/' + brewery.untappd.contact.twitter + '" target="_blank"><i class="fa fa-twitter"></i></a>';
+				}
+				content += '</p>';
 				viewModel.infowindow.setOptions({
 					content: content,
 					position: brewery.marker.position
