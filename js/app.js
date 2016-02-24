@@ -18,11 +18,30 @@ viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	//Two calls to Untappd: a search for the brewery, then details for the top result
 	$.getJSON('/untappd/search?q=' + brewery.name, function (search) {
-		$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
-			console.log(details);
+		if (search.response.brewery.items[0] !== undefined) {
+			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
+				console.log(details);
+				var content = '';
+				brewery.untappd = details.response.brewery;
+				content += '<img src="' + brewery.untappd.brewery_label + '">';
+				content += '<h1>' + brewery.name + '</h1>';
+				if (brewery.hasOwnProperty('established')) {
+					content += '<p> est. ' + brewery.established + '</p>';
+				}
+				if (brewery.hasOwnProperty('website')) {
+					content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>';
+				}
+				if (brewery.hasOwnProperty('description')) {
+					content += '<p>' + brewery.description + '</p>';
+				}
+				viewModel.infowindow.setOptions({
+					content: content,
+					position: brewery.marker.position
+				});
+				viewModel.infowindow.open(map);
+			});
+		} else {
 			var content = '';
-			brewery.untappd = details.response.brewery;
-			content += '<img src="' + brewery.untappd.brewery_label + '">';
 			content += '<h1>' + brewery.name + '</h1>';
 			if (brewery.hasOwnProperty('established')) {
 				content += '<p> est. ' + brewery.established + '</p>';
@@ -38,7 +57,7 @@ viewModel.infoWindowChange = function (brewery) {
 				position: brewery.marker.position
 			});
 			viewModel.infowindow.open(map);
-		});
+		}
 	});
 };
 
