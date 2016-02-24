@@ -17,6 +17,7 @@ var viewModel = {
 // uses the infoWindow setOptions method to change its content and position, then open it on the map
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
+	brewery.marker.setAnimation(google.maps.Animation.BOUNCE);
 	//Two calls to Untappd: a search for the brewery, then details for the top result
 	$.getJSON('/untappd/search?q=' + brewery.name, function (search) {
 		if (search.response.brewery.items[0] !== undefined) {
@@ -51,6 +52,8 @@ viewModel.infoWindowChange = function (brewery) {
 					position: brewery.marker.position
 				});
 				viewModel.infowindow.open(map);
+				brewery.marker.setAnimation(null);
+
 			});
 		} else {
 			var content = '';
@@ -69,6 +72,7 @@ viewModel.infoWindowChange = function (brewery) {
 				position: brewery.marker.position
 			});
 			viewModel.infowindow.open(map);
+			brewery.marker.setAnimation(null);
 		}
 	});
 };
