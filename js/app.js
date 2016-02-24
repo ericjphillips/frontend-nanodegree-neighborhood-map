@@ -96,6 +96,19 @@ viewModel.listView = ko.computed(function () {
 	}
 });
 
+viewModel.visibleMarkers = ko.computed(function () {
+	'use strict';
+	var model = viewModel.brewery(),
+		listView = viewModel.listView();
+	model.forEach(function (brewery) {
+		if (listView.indexOf(brewery) !== -1) {
+			brewery.marker.setMap(map);
+		} else {
+			brewery.marker.setMap(null);
+		}
+	});
+});
+
 // AJAX request to BreweryDB for all breweries in the state of Vermont
 $.ajax({
 	type: 'GET',
@@ -119,7 +132,7 @@ $.ajax({
 					lat: brewery.latitude,
 					lng: brewery.longitude
 				},
-				map: map,
+				map: null,
 				title: brewery.name
 			});
 			model.marker.addListener('click', function () {
