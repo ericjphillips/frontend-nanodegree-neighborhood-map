@@ -9,10 +9,10 @@
 
 <body>
 	<div id="searchbar">
-		<h1>Vermont Breweries</h1>
+		<input data-bind="textInput: keywords">
 	</div>
 	<div id="sidebar">
-		<ul id="list-view" data-bind="foreach: brewery">
+		<ul id="list-view" data-bind="foreach: listView">
 			<li>
 				<a href="#" data-bind="text: name, click: $parent.infoWindowChange"></a>
 			</li>

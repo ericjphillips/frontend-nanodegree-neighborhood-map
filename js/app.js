@@ -6,6 +6,7 @@ var viewModel = {
 		lng: -72.5623
 	},
 	brewery: ko.observableArray(),
+	keywords: ko.observable(''),
 	infowindow: {}
 };
 
@@ -71,6 +72,29 @@ viewModel.infoWindowChange = function (brewery) {
 		}
 	});
 };
+
+// This utility function doesn't ship with the minified version of Knockout!
+// Thank you Google user 'rpn' for defining this function
+ko.utils.stringStartsWith = function (string, startsWith) {
+	'use strict';
+	string = string || "";
+	if (startsWith.length > string.length) {
+		return false;
+	}
+	return string.substring(0, startsWith.length) === startsWith;
+};
+
+viewModel.listView = ko.computed(function () {
+	'use strict';
+	var keywords = viewModel.keywords().toLowerCase();
+	if (!keywords || keywords.length < 1) {
+		return viewModel.brewery();
+	} else {
+		return viewModel.brewery.remove(function (item) {
+			return ko.utils.stringStartsWith(item.name.toLowerCase(), keywords);
+		});
+	}
+});
 
 // AJAX request to BreweryDB for all breweries in the state of Vermont
 $.ajax({
