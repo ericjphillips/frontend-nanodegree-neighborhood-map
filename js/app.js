@@ -5,7 +5,7 @@ var viewModel = {
 		lat: 43.9753,
 		lng: -72.5623
 	},
-	brewery: ko.observableArray(),
+	brewery: ko.observableArray([]),
 	keywords: ko.observable(''),
 	infowindow: {}
 };
@@ -90,7 +90,7 @@ viewModel.listView = ko.computed(function () {
 	if (!keywords || keywords.length < 1) {
 		return viewModel.brewery();
 	} else {
-		return viewModel.brewery.remove(function (item) {
+		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
 			return ko.utils.stringStartsWith(item.name.toLowerCase(), keywords);
 		});
 	}
