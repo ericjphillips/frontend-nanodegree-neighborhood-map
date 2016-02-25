@@ -80,13 +80,13 @@ viewModel.infoWindowChange = function (brewery) {
 
 // This utility function doesn't ship with the minified version of Knockout!
 // Thank you Google user 'rpn' for defining this function
-ko.utils.stringStartsWith = function (string, startsWith) {
+ko.utils.stringContains = function (string, substring) {
 	'use strict';
 	string = string || "";
-	if (startsWith.length > string.length) {
+	if (substring.length > string.length) {
 		return false;
 	}
-	return string.substring(0, startsWith.length) === startsWith;
+	return string.indexOf(substring) > -1;
 };
 
 viewModel.listView = ko.computed(function () {
@@ -96,7 +96,7 @@ viewModel.listView = ko.computed(function () {
 		return viewModel.brewery();
 	} else {
 		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-			return ko.utils.stringStartsWith(item.name.toLowerCase(), keywords);
+			return ko.utils.stringContains(item.name.toLowerCase(), keywords);
 		});
 	}
 });
