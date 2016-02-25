@@ -91,7 +91,7 @@ ko.utils.stringStartsWith = function (string, startsWith) {
 viewModel.listView = ko.computed(function () {
 	'use strict';
 	var keywords = viewModel.keywords().toLowerCase();
-	if (!keywords || keywords.length < 1) {
+	if (!keywords) {
 		return viewModel.brewery();
 	} else {
 		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
