@@ -17,6 +17,7 @@ var viewModel = {
 // uses the infoWindow setOptions method to change its content and position, then open it on the map
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
+	viewModel.infowindow.close();
 	brewery.marker.setAnimation(google.maps.Animation.BOUNCE);
 	//Two calls to Untappd: a search for the brewery, then details for the top result
 	$.getJSON('/untappd/search?q=' + brewery.name, function (search) {
