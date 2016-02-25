@@ -31,3 +31,10 @@ body {
 	top: 0;
 	left: 0;
 }
+
+#search {
+	margin-top: 2%;
+	margin-left: 22%;
+	height: 50%;
+	width: 77%;
+}
