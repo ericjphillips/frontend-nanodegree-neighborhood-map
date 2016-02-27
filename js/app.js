@@ -6,6 +6,8 @@ var viewModel = {
 		lng: -72.5623
 	},
 	brewery: ko.observableArray([]),
+	filterby: ko.observable(''),
+	onlyOrganic: ko.observable(),
 	keywords: ko.observable(''),
 	infowindow: {}
 };
@@ -20,14 +22,14 @@ viewModel.infoWindowChange = function (brewery) {
 	viewModel.infowindow.close();
 	brewery.marker.setAnimation(google.maps.Animation.BOUNCE);
 	//Two calls to Untappd: a search for the brewery, then details for the top result
-	$.getJSON('/untappd/search?q=' + brewery.name, function (search) {
+	$.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
 		if (search.response.brewery.items[0] !== undefined) {
 			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
 				console.log(details);
 				var content = '';
 				brewery.untappd = details.response.brewery;
 				content += '<img src="' + brewery.untappd.brewery_label + '">';
-				content += '<h1>' + brewery.name + '</h1>';
+				content += '<h1>' + brewery.brewery.name + '</h1>';
 				if (brewery.hasOwnProperty('established')) {
 					content += '<p> est. ' + brewery.established + '</p>';
 				}
@@ -58,7 +60,7 @@ viewModel.infoWindowChange = function (brewery) {
 			});
 		} else {
 			var content = '';
-			content += '<h1>' + brewery.name + '</h1>';
+			content += '<h1>' + brewery.brewery.name + '</h1>';
 			if (brewery.hasOwnProperty('established')) {
 				content += '<p> est. ' + brewery.established + '</p>';
 			}
@@ -95,9 +97,16 @@ viewModel.listView = ko.computed(function () {
 	if (!keywords) {
 		return viewModel.brewery();
 	} else {
-		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-			return ko.utils.stringContains(item.name.toLowerCase(), keywords);
-		});
+		switch (viewModel.filterby()) {
+		case 'Name':
+			return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+				return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords);
+			});
+		case 'Location':
+			return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+				return ko.utils.stringContains(item.locality.toLowerCase(), keywords);
+			});
+		}
 	}
 });
 
@@ -131,14 +140,14 @@ $.ajax({
 		'use strict';
 		console.log(response);
 		response.data.forEach(function (brewery) {
-			var model = brewery.brewery;
+			var model = brewery;
 			model.marker = new google.maps.Marker({
 				position: {
-					lat: brewery.latitude,
-					lng: brewery.longitude
+					lat: model.latitude,
+					lng: model.longitude
 				},
 				map: null,
-				title: brewery.name
+				title: model.brewery.name
 			});
 			model.marker.addListener('click', function () {
 				viewModel.infoWindowChange(model);
@@ -146,7 +155,7 @@ $.ajax({
 			viewModel.brewery.push(model);
 			if (response.data.indexOf(brewery) === response.data.length - 1) {
 				viewModel.brewery.sort(function (left, right) {
-					return left.name === right.name ? 0 : (left.name < right.name ? -1 : 1);
+					return left.brewery.name === right.brewery.name ? 0 : (left.brewery.name < right.brewery.name ? -1 : 1);
 				});
 			}
 		});

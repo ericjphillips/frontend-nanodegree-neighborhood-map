@@ -11,9 +11,9 @@
 	<div id="searchbar">
 		<p>filter by:</p>
 		<form>
-			<select name="filter" data-bind="value: filterBy">
-				<option value="name">Name</option>
-				<option value="style">Beer Style</option>
+			<select data-bind="value: filterby">
+				<option value="Name" selected>Name</option>
+				<option value="Location">Location</option>
 			</select>
 		</form>
 		<input id="search" type="text" placeholder="" data-bind="textInput: keywords">
@@ -22,7 +22,7 @@
 	<div id="sidebar">
 		<ul id="list-view" data-bind="foreach: listView">
 			<li>
-				<a href="#" data-bind="text: name, click: $parent.infoWindowChange"></a>
+				<a href="#" data-bind="text: brewery.name, click: $parent.infoWindowChange"></a>
 			</li>
 		</ul>
 	</div>
