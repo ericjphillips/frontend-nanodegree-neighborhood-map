@@ -9,7 +9,15 @@
 
 <body>
 	<div id="searchbar">
-		<input id="search" placeholder="Name, Type, Beer Type" data-bind="textInput: keywords">
+		<p>filter by:</p>
+		<form>
+			<select name="filter" data-bind="value: filterBy">
+				<option value="name">Name</option>
+				<option value="style">Beer Style</option>
+			</select>
+		</form>
+		<input id="search" type="text" placeholder="" data-bind="textInput: keywords">
+		<input name="organic" type="checkbox" value="Y" data-bind="value: onlyOrganic"> is Organic
 	</div>
 	<div id="sidebar">
 		<ul id="list-view" data-bind="foreach: listView">
