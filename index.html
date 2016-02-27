@@ -2,6 +2,8 @@
 <html>
 
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vermont Breweries</title>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -9,6 +11,7 @@
 
 <body>
 	<div id="sidebar">
+		<a href="#" class="chevron">⟫</a>
 		<form>
 			<span>filter by </span>
 			<select data-bind="value: filterby">
@@ -16,8 +19,9 @@
 				<option value="Location">City</option>
 			</select>
 			<input type="text" data-bind="textInput: keywords">
+			<br>
+			<span>Open to the public </span>
 			<input type="checkbox" data-bind="checked: open2Public">
-			<span> Open to the public</span>
 		</form>
 		<ul id="list-view" data-bind="foreach: listView">
 			<li>
