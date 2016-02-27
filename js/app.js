@@ -79,7 +79,7 @@ viewModel.infoWindowChange = function (brewery) {
 };
 
 // This utility function doesn't ship with the minified version of Knockout!
-// Thank you Google user 'rpn' for defining this function
+// Thank you Google user 'rpn' for defining a similar function function
 ko.utils.stringContains = function (string, substring) {
 	'use strict';
 	string = string || "";
