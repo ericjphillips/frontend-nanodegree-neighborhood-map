@@ -7,7 +7,7 @@ var viewModel = {
 	},
 	brewery: ko.observableArray([]),
 	filterby: ko.observable(''),
-	onlyOrganic: ko.observable(),
+	onlyOrganic: ko.observable(false),
 	keywords: ko.observable(''),
 	infowindow: {}
 };
@@ -93,19 +93,38 @@ ko.utils.stringContains = function (string, substring) {
 
 viewModel.listView = ko.computed(function () {
 	'use strict';
-	var keywords = viewModel.keywords().toLowerCase();
-	if (!keywords) {
+	var onlyOrganic = viewModel.onlyOrganic(),
+		keywords = viewModel.keywords().toLowerCase(),
+		filter = viewModel.filterby();
+	if (!keywords && !onlyOrganic) {
 		return viewModel.brewery();
+	} else if (!keywords && onlyOrganic) {
+		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+			return item.brewery.isOrganic === 'Y';
+		});
 	} else {
-		switch (viewModel.filterby()) {
+		switch (filter) {
 		case 'Name':
-			return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-				return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords);
-			});
+			if (onlyOrganic) {
+				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.brewery.isOrganic === 'Y';
+				});
+			} else {
+				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords);
+				});
+			}
+
 		case 'Location':
-			return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-				return ko.utils.stringContains(item.locality.toLowerCase(), keywords);
-			});
+			if (onlyOrganic) {
+				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+					return ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.brewery.isOrganic === 'Y';
+				});
+			} else {
+				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+					return ko.utils.stringContains(item.locality.toLowerCase(), keywords);
+				});
+			}
 		}
 	}
 });
