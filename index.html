@@ -8,18 +8,17 @@
 </head>
 
 <body>
-	<div id="searchbar">
-		<p>filter by:</p>
+	<div id="sidebar">
 		<form>
+			<span>filter by </span>
 			<select data-bind="value: filterby">
 				<option value="Name" selected>Name</option>
-				<option value="Location">Location</option>
+				<option value="Location">City</option>
 			</select>
+			<input type="text" data-bind="textInput: keywords">
+			<input type="checkbox" data-bind="checked: open2Public">
+			<span> Open to the public</span>
 		</form>
-		<input id="search" type="text" placeholder="" data-bind="textInput: keywords">
-		<input name="public" type="checkbox" data-bind="checked: open2Public"> Open to the public
-	</div>
-	<div id="sidebar">
 		<ul id="list-view" data-bind="foreach: listView">
 			<li>
 				<a href="#" data-bind="text: brewery.name, click: $parent.infoWindowChange"></a>
