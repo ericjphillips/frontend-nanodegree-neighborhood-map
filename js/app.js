@@ -7,13 +7,14 @@ var viewModel = {
 	},
 	brewery: ko.observableArray([]),
 	filterby: ko.observable(''),
-	onlyOrganic: ko.observable(false),
+	open2Public: ko.observable(false),
 	keywords: ko.observable(''),
 	infowindow: {}
 };
 
 // method to move the map's infowindow and update its content.
 // takes a brewery as an argument
+// closes any open infowindow
 // makes a call to Untappd for more detailed information
 // assembles infowindow content from available information
 // uses the infoWindow setOptions method to change its content and position, then open it on the map
@@ -81,7 +82,8 @@ viewModel.infoWindowChange = function (brewery) {
 };
 
 // This utility function doesn't ship with the minified version of Knockout!
-// Thank you Google user 'rpn' for defining a similar function function
+// Search a string for a substring, return true if found
+// Thank you Google user 'rpn' for defining a similar function
 ko.utils.stringContains = function (string, substring) {
 	'use strict';
 	string = string || "";
@@ -91,23 +93,25 @@ ko.utils.stringContains = function (string, substring) {
 	return string.indexOf(substring) > -1;
 };
 
+// A method to filter the list view
+// Looks for user text or checkbox, then filters the array appropriately
 viewModel.listView = ko.computed(function () {
 	'use strict';
-	var onlyOrganic = viewModel.onlyOrganic(),
+	var open2Public = viewModel.open2Public(),
 		keywords = viewModel.keywords().toLowerCase(),
 		filter = viewModel.filterby();
-	if (!keywords && !onlyOrganic) {
+	if (!keywords && !open2Public) {
 		return viewModel.brewery();
-	} else if (!keywords && onlyOrganic) {
+	} else if (!keywords && open2Public) {
 		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-			return item.brewery.isOrganic === 'Y';
+			return item.openToPublic === 'Y';
 		});
 	} else {
 		switch (filter) {
 		case 'Name':
-			if (onlyOrganic) {
+			if (open2Public) {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.brewery.isOrganic === 'Y';
+					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.openToPublic === 'Y';
 				});
 			} else {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
@@ -116,9 +120,9 @@ viewModel.listView = ko.computed(function () {
 			}
 
 		case 'Location':
-			if (onlyOrganic) {
+			if (open2Public) {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.brewery.isOrganic === 'Y';
+					return ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.openToPublic === 'Y';
 				});
 			} else {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
@@ -129,6 +133,8 @@ viewModel.listView = ko.computed(function () {
 	}
 });
 
+// A method to sync the map and list view.
+// Loops through list view, if a brewery is on the map and in the list its marker is set on the map
 viewModel.visibleMarkers = ko.computed(function () {
 	'use strict';
 	var model = viewModel.brewery(),
@@ -155,7 +161,7 @@ $.ajax({
 		// Iterates through the response and builds a model object for each brewery.
 		// Adds a Google Maps marker with event listener to each.
 		// Pushes the model to the viewModel observable array.
-		// Checks if that was the last brewery in the array, and if so performs a sort on the viewModel data.
+		// Checks if that was the last brewery in the array, and if so performs a sort by name on the viewModel data.
 		'use strict';
 		console.log(response);
 		response.data.forEach(function (brewery) {
