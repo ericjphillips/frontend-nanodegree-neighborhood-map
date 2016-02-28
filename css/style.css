@@ -6,34 +6,45 @@ body {
 	position: relative;
 }
 
-a,
-a:visited {
-	color: #000;
-	text-decoration: none;
-}
-
 #map {
 	height: 100vh;
-	width: calc(100vw - 20px);
-	top: 0;
-	left: 20px;
+	width: calc(100vw - 24px);
+	margin-left: 24px;
 }
 
 #sidebar {
+	background-color: #AAA;
 	height: 100vh;
 	width: 30vw;
 	overflow: scroll;
 	z-index: 1;
 	position: absolute;
-	background-color: #AAA;
-	transform: translateX(calc(-30vw + 24px));
+	left: calc(-30vw + 24px);
+	transition-property: transform;
+	transition-duration: .8s;
+	transition-timing-function: ease;
+	will-change: transform;
 }
 
-.chevron {
+.slide {
+	transform: translate3d(calc(30vw - 24px), 0, 0);
+}
+
+.spin {
+	transform: rotateY(180deg);
+}
+
+#chevron {
+	background-color: #0F0;
+	border-radius: 90%;
 	text-align: center;
 	width: 48px;
 	font-size: 2em;
 	position: absolute;
 	right: -16px;
 	top: 50vh;
+	transition-property: transform;
+	transition-duration: .8s;
+	transition-timing-function: ease;
+	will-change: transform;
 }

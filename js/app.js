@@ -210,3 +210,14 @@ function initMap() {
 
 // apply bindings
 ko.applyBindings(viewModel);
+var chevron = document.getElementById('chevron');
+var sidebar = document.getElementById('sidebar');
+
+function slide() {
+	'use strict';
+	sidebar.classList.toggle('slide');
+	chevron.classList.toggle('spin');
+
+}
+
+chevron.addEventListener('click', slide);
