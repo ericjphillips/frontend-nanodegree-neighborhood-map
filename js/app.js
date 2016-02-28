@@ -27,19 +27,20 @@ viewModel.infoWindowChange = function (brewery) {
 		if (search.response.brewery.items[0] !== undefined) {
 			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
 				console.log(details);
-				var content = '';
+				var content = '',
+					bestRated;
 				brewery.untappd = details.response.brewery;
 				content += '<img src="' + brewery.untappd.brewery_label + '">';
-				content += '<h1>' + brewery.brewery.name + '</h1>';
+				content += '<h1>' + brewery.untappd.brewery_name + '</h1>';
 				if (brewery.hasOwnProperty('established')) {
 					content += '<p> est. ' + brewery.established + '</p>';
 				}
-				if (brewery.hasOwnProperty('description')) {
-					content += '<p>' + brewery.description + '</p>';
+				if (brewery.untappd.hasOwnProperty('brewery_description')) {
+					content += '<p>' + brewery.untappd.brewery_description + '</p>';
 				}
 				content += '<p>';
-				if (brewery.hasOwnProperty('website')) {
-					content += '<a href="' + brewery.website + '" target="_blank">' + brewery.website + '</a> ';
+				if (brewery.untappd.contact.url.length > 0) {
+					content += '<a href="' + brewery.untappd.contact.url + '" target="_blank">' + brewery.untappd.contact.url + '</a> ';
 				}
 				if (brewery.untappd.contact.facebook.length > 0) {
 					content += '<a href="' + brewery.untappd.contact.facebook + '" target="_blank"><i class="fa fa-facebook-official"></i></a> ';
@@ -50,7 +51,14 @@ viewModel.infoWindowChange = function (brewery) {
 				if (brewery.untappd.contact.twitter.length > 0) {
 					content += '<a href="https://twitter.com/' + brewery.untappd.contact.twitter + '" target="_blank"><i class="fa fa-twitter"></i></a>';
 				}
-				content += '</p>';
+				if (brewery.untappd.beer_list.items.length > 0) {
+					content += '</p>';
+					content += '<p>Beer enthusiasts on Untappd really like the ';
+					bestRated = brewery.untappd.beer_list.items.reduce(function (prev, curr) {
+						return (prev.beer.rating_score > curr.beer.rating_score) ? prev : curr;
+					});
+					content += '<a href="https://untappd.com/beer/' + bestRated.beer.bid + '" target="_blank">' + bestRated.beer.beer_name + '</a>';
+				}
 				viewModel.infowindow.setOptions({
 					content: content,
 					position: brewery.marker.position
