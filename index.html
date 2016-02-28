@@ -12,16 +12,19 @@
 <body>
 	<a href="#" id="chevron">⟫</a>
 	<div id="sidebar">
-		<form>
-			<span>filter by </span>
-			<select data-bind="value: filterby">
-				<option value="Name" selected>Name</option>
-				<option value="Location">City</option>
-			</select>
-			<input type="text" data-bind="textInput: keywords">
-			<br>
-			<span>Open to the public </span>
-			<input type="checkbox" data-bind="checked: open2Public">
+		<form id="filter">
+			<div class="text-search">
+				<span>filter by  </span>
+				<select data-bind="value: filterby">
+					<option value="Name" selected>Name</option>
+					<option value="Location">City</option>
+				</select>
+				<input class="text-field" type="text" data-bind="textInput: keywords">
+			</div>
+			<div>
+				<span>open to the public </span>
+				<input type="checkbox" data-bind="checked: open2Public">
+			</div>
 		</form>
 		<ul id="list-view" data-bind="foreach: listView">
 			<li class="list-item">
