@@ -22,7 +22,8 @@ viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	viewModel.infowindow.close();
 	brewery.marker.setAnimation(google.maps.Animation.BOUNCE);
-	//Two calls to Untappd: a search for the brewery, then details for the top result
+	// Two calls to Untappd: a search for the brewery, then details for the top result
+	// The call goes to /untappd/ which is our Node.js server, which does the actualy query to Untappd API
 	$.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
 		if (search.response.brewery.items[0] !== undefined) {
 			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
