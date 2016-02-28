@@ -40,12 +40,13 @@ i {
 }
 
 #chevron {
-	background-color: #0F0;
+	background-color: #0D0;
 	text-align: center;
 	width: 39px;
 	border-radius: 39px;
 	font-size: 2em;
 	text-decoration: none;
+	position: absolute;
 	right: -15px;
 	top: calc(50vh - 19px);
 	transition-property: transform;
