@@ -6,6 +6,15 @@ body {
 	position: relative;
 }
 
+a,
+a:visited {
+	color: #00F;
+}
+
+a:active {
+	color: #F00;
+}
+
 #map {
 	height: 100vh;
 	width: calc(100vw - 24px);
