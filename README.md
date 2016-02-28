@@ -1,5 +1,5 @@
 # Vermont Breweries: An Interactive Map
-This is a single page application integrating information from several third-party APIs. A list of breweries in the state of Vermont is retrieved from [BreweryDB](http://www.brewerydb.com/), which are then added to a map. A list view and filter are provided. Info windows on the map provide detailed information on selected breweries.
+This is a single page application integrating information from Google Maps and two third-party APIs. A list of breweries in the state of Vermont is retrieved from [BreweryDB](http://www.brewerydb.com/), which are then added to a map. A list view and filter are provided. Info windows on the map provide detailed information from [Untappd](https://untappd.com/) on selected breweries.
 
 ## Getting Started
 ### Required Software
