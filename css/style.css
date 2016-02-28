@@ -88,3 +88,20 @@ i {
 	width: 65%;
 	height: 20px;
 }
+
+.attributions {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: #EEE;
+	width: 160px;
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	right: 0;
+}
+
+.attributions img {
+	margin: 5px 0 5px 0;
+	width: 100%;
+	height: 50%;
+}
