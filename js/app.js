@@ -218,6 +218,8 @@ function initMap() {
 
 // apply bindings
 ko.applyBindings(viewModel);
+
+// add click event to slide the menu
 var chevron = document.getElementById('chevron');
 var sidebar = document.getElementById('sidebar');
 
