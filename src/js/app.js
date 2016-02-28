@@ -1,4 +1,4 @@
-var console, $, google, map, ko;
+var $, google, map, ko;
 
 var viewModel = {
 	center: {
@@ -27,7 +27,6 @@ viewModel.infoWindowChange = function (brewery) {
 	$.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
 		if (search.response.brewery.items[0] !== undefined) {
 			$.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
-				console.log(details);
 				var content = '',
 					bestRated;
 				brewery.untappd = details.response.brewery;
@@ -172,7 +171,6 @@ $.ajax({
 		// Pushes the model to the viewModel observable array.
 		// Checks if that was the last brewery in the array, and if so performs a sort by name on the viewModel data.
 		'use strict';
-		console.log(response);
 		response.data.forEach(function (brewery) {
 			var model = brewery;
 			model.marker = new google.maps.Marker({
@@ -197,7 +195,7 @@ $.ajax({
 
 	error: function () {
 		'use strict';
-		console.log('Oh no. No brewery data available :-(');
+		window.alert('Oh no. No brewery data available. Please check your connection.');
 	}
 });
 
