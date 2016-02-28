@@ -111,7 +111,7 @@ a:active {
 	height: 50%;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 520px) {
 	#sidebar {
 		width: 60vw;
 		position: absolute;
