@@ -31,7 +31,7 @@
 		</form>
 		<ul id="list-view" data-bind="foreach: listView">
 			<li class="list-item">
-				<a href="#" data-bind="text: brewery.name, click: $parent.infoWindowChange"></a>
+				<a href="#" data-bind="text: brewery.name, click: $parent.infoWindowChange"></a> -<em><span data-bind="text: locality"></span></em>
 			</li>
 		</ul>
 	</div>
