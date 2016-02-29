@@ -236,6 +236,11 @@ function initMap() {
 
 }
 
+function googleError() {
+	'use strict';
+	window.alert('Google Maps could not be reached.');
+}
+
 // apply bindings
 ko.applyBindings(viewModel);
 
