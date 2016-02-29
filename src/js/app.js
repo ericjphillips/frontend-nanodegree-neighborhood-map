@@ -231,7 +231,8 @@ function initMap() {
 	});
 
 	viewModel.infowindow = new google.maps.InfoWindow({
-		content: ''
+		content: '',
+		pixelOffset: new google.maps.Size(0, -30)
 	});
 
 }
