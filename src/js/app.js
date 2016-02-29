@@ -112,51 +112,69 @@ viewModel.listView = ko.computed(function () {
 		keywords = viewModel.keywords().toLowerCase(),
 		filter = viewModel.filterby();
 	if (!keywords && !open2Public) {
+		viewModel.brewery().forEach(function (item) {
+			item.marker.setVisible(true);
+		});
 		return viewModel.brewery();
 	} else if (!keywords && open2Public) {
 		return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-			return item.openToPublic === 'Y';
+			if (item.openToPublic === 'Y') {
+				item.marker.setVisible(true);
+				return true;
+			} else {
+				item.marker.setVisible(false);
+				return false;
+			}
 		});
 	} else {
 		switch (filter) {
 		case 'Name':
 			if (open2Public) {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.openToPublic === 'Y';
+					if (ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.openToPublic === 'Y') {
+						item.marker.setVisible(true);
+						return true;
+					} else {
+						item.marker.setVisible(false);
+						return false;
+					}
 				});
 			} else {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords);
+					if (ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords)) {
+						item.marker.setVisible(true);
+						return true;
+					} else {
+						item.marker.setVisible(false);
+						return false;
+					}
 				});
 			}
 
 		case 'Location':
 			if (open2Public) {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.openToPublic === 'Y';
+					if (ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.openToPublic === 'Y') {
+						item.marker.setVisible(true);
+						return true;
+					} else {
+						item.marker.setVisible(false);
+						return false;
+					}
 				});
 			} else {
 				return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-					return ko.utils.stringContains(item.locality.toLowerCase(), keywords);
+					if (ko.utils.stringContains(item.locality.toLowerCase(), keywords)) {
+						item.marker.setVisible(true);
+						return true;
+					} else {
+						item.marker.setVisible(false);
+						return false;
+					}
 				});
 			}
 		}
 	}
-});
-
-// A method to sync the map and list view.
-// Loops through list view, if a brewery is on the map and in the list its marker is set on the map
-viewModel.visibleMarkers = ko.computed(function () {
-	'use strict';
-	var model = viewModel.brewery(),
-		listView = viewModel.listView();
-	model.forEach(function (brewery) {
-		if (listView.indexOf(brewery) !== -1) {
-			brewery.marker.setMap(map);
-		} else {
-			brewery.marker.setMap(null);
-		}
-	});
 });
 
 // AJAX request to BreweryDB for all breweries in the state of Vermont
@@ -181,7 +199,7 @@ $.ajax({
 					lat: model.latitude,
 					lng: model.longitude
 				},
-				map: null,
+				map: map,
 				title: model.brewery.name
 			});
 			model.marker.addListener('click', function () {
