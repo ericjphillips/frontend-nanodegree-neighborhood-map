@@ -21,6 +21,11 @@ var viewModel = {
 viewModel.infoWindowChange = function (brewery) {
 	'use strict';
 	viewModel.infowindow.close();
+	viewModel.infowindow.setOptions({
+		content: 'Loading: <i class="fa fa-beer fa-spin"></i>',
+		position: brewery.marker.position
+	});
+	viewModel.infowindow.open(map);
 	brewery.marker.setAnimation(google.maps.Animation.BOUNCE);
 	// Two calls to Untappd: a search for the brewery, then details for the top result
 	// The call goes to /untappd/ which is our Node.js server, which does the actualy query to Untappd API
@@ -80,10 +85,8 @@ viewModel.infoWindowChange = function (brewery) {
 				content += '<p>' + brewery.description + '</p>';
 			}
 			viewModel.infowindow.setOptions({
-				content: content,
-				position: brewery.marker.position
+				content: content
 			});
-			viewModel.infowindow.open(map);
 			brewery.marker.setAnimation(null);
 		}
 	});
