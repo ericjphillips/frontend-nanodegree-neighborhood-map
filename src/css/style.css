@@ -1,174 +1,132 @@
 html,
-body
-{
-    position: relative;
-
-    height: 100vh;
-    margin: 0;
-    padding: 0;
+body {
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 a,
-a:visited
-{
-    color: #00f;
+a:visited {
+  color: #00f;
 }
 
-a:active
-{
-    color: #f00;
+a:active {
+  color: #f00;
 }
 
-#map
-{
-    width: calc(100vw - 24px);
-    height: 100vh;
-    margin-left: 24px;
+#map {
+  width: calc(100vw - 24px);
+  height: 100vh;
+  margin-left: 24px;
 }
 
-#sidebar
-{
+#sidebar {
+  position: absolute;
+  z-index: 1;
+  left: calc(-30vw + 24px);
+  overflow: scroll;
+  width: 30vw;
+  height: 100vh;
+  transition-timing-function: ease;
+  transition-duration: 1.1s;
+  transition-property: transform;
+  background-color: #292;
+  will-change: transform;
+}
+
+.slide {
+  transform: translate3d(calc(30vw - 24px), 0, 0);
+}
+
+.spin {
+  transform: translate3d(calc(30vw - 24px), 0, 0) rotateY(180deg);
+}
+
+#chevron {
+  font-size: 2em;
+  position: fixed;
+  z-index: 2;
+  top: calc(50vh - 19px);
+  left: 0;
+  width: 39px;
+  transition-timing-function: ease;
+  transition-duration: 1.1s;
+  transition-property: transform;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 39px;
+  background-color: #0d0;
+  will-change: transform;
+}
+
+#list-view {
+  width: calc(30vw - 40px);
+  margin: 0;
+  padding-left: 10px;
+  list-style: none;
+  list-style-type: none;
+  list-style-image: none;
+  border-radius: 0 20px 0 0;
+  background-color: #eee;
+}
+
+.list-item {
+  padding: 12px 0 12px 0;
+}
+
+#filter {
+  display: flex;
+  width: calc(30vw - 50px);
+  height: 64px;
+  margin: 10px 0 10px 0;
+  padding: 10px;
+  background: #eee;
+  flex-wrap: wrap;
+}
+
+.text-search {
+  width: 100%;
+}
+
+.text-field {
+  width: 75%;
+  height: 20px;
+}
+
+.attributions {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  display: flex;
+  width: 100px;
+  background-color: #eee;
+  flex-wrap: wrap;
+}
+
+.attributions img {
+  width: 100%;
+  height: 50%;
+  margin: 5px 0 5px 0;
+}
+
+@media only screen and (max-width: 520px) {
+  #sidebar {
     position: absolute;
-    z-index: 1;
-    left: calc(-30vw + 24px);
-
-    overflow: scroll;
-
-    width: 30vw;
-    height: 100vh;
-
-    transition-timing-function: ease;
-    transition-duration: 1.1s;
-    transition-property: transform;
-
-    background-color: #292;
-
-    will-change: transform;
-}
-
-.slide
-{
-    transform: translate3d(calc(30vw - 24px), 0, 0);
-}
-
-.spin
-{
-    transform: translate3d(calc(30vw - 24px), 0, 0) rotateY(180deg);
-}
-
-#chevron
-{
-    font-size: 2em;
-
-    position: fixed;
-    z-index: 2;
-    top: calc(50vh - 19px);
-    left: 0;
-
-    width: 39px;
-
-    transition-timing-function: ease;
-    transition-duration: 1.1s;
-    transition-property: transform;
-    text-align: center;
-    text-decoration: none;
-
-    border-radius: 39px;
-    background-color: #0d0;
-
-    will-change: transform;
-}
-
-#list-view
-{
-    width: calc(30vw - 40px);
-    margin: 0;
-    padding-left: 10px;
-
-    list-style: none;
-    list-style-type: none;
-    list-style-image: none;
-
-    border-radius: 0 20px 0 0;
-    background-color: #eee;
-}
-
-.list-item
-{
-    padding: 12px 0 12px 0;
-}
-
-#filter
-{
-    display: flex;
-
-    width: calc(30vw - 50px);
-    height: 64px;
-    margin: 10px 0 10px 0;
-    padding: 10px;
-
-    background: #eee;
-
-    flex-wrap: wrap;
-}
-
-.text-search
-{
-    width: 100%;
-}
-
-.text-field
-{
-    width: 75%;
-    height: 20px;
-}
-
-.attributions
-{
-    position: fixed;
-    z-index: 3;
-    top: 0;
-    right: 0;
-
-    display: flex;
-
-    width: 100px;
-
-    background-color: #eee;
-
-    flex-wrap: wrap;
-}
-
-.attributions img
-{
-    width: 100%;
-    height: 50%;
-    margin: 5px 0 5px 0;
-}
-
-@media only screen and (max-width: 520px)
-{
-    #sidebar
-    {
-        position: absolute;
-        left: calc(-60vw + 24px);
-
-        width: 60vw;
-    }
-    .slide
-    {
-        transform: translate3d(calc(60vw - 24px), 0, 0);
-    }
-    .spin
-    {
-        transform: translate3d(calc(60vw - 24px), 0, 0) rotateY(180deg);
-    }
-    #list-view
-    {
-        width: calc(60vw - 40px);
-    }
-    #filter
-    {
-        width: calc(60vw - 50px);
-    }
+    left: calc(-60vw + 24px);
+    width: 60vw;
+  }
+  .slide {
+    transform: translate3d(calc(60vw - 24px), 0, 0);
+  }
+  .spin {
+    transform: translate3d(calc(60vw - 24px), 0, 0) rotateY(180deg);
+  }
+  #list-view {
+    width: calc(60vw - 40px);
+  }
+  #filter {
+    width: calc(60vw - 50px);
+  }
 }
