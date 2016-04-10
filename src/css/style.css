@@ -1,132 +1,174 @@
 html,
-body {
-	height: 100vh;
-	padding: 0;
-	margin: 0;
-	position: relative;
+body
+{
+    position: relative;
+
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 a,
-a:visited {
-	color: #00F;
+a:visited
+{
+    color: #00f;
 }
 
-a:active {
-	color: #F00;
+a:active
+{
+    color: #f00;
 }
 
-#map {
-	height: 100vh;
-	width: calc(100vw - 24px);
-	margin-left: 24px;
+#map
+{
+    width: calc(100vw - 24px);
+    height: 100vh;
+    margin-left: 24px;
 }
 
-#sidebar {
-	background-color: #292;
-	height: 100vh;
-	width: 30vw;
-	overflow: scroll;
-	z-index: 1;
-	position: absolute;
-	left: calc(-30vw + 24px);
-	transition-property: transform;
-	transition-duration: 1.1s;
-	transition-timing-function: ease;
-	will-change: transform;
+#sidebar
+{
+    position: absolute;
+    z-index: 1;
+    left: calc(-30vw + 24px);
+
+    overflow: scroll;
+
+    width: 30vw;
+    height: 100vh;
+
+    transition-timing-function: ease;
+    transition-duration: 1.1s;
+    transition-property: transform;
+
+    background-color: #292;
+
+    will-change: transform;
 }
 
-.slide {
-	transform: translate3d(calc(30vw - 24px), 0, 0);
+.slide
+{
+    transform: translate3d(calc(30vw - 24px), 0, 0);
 }
 
-.spin {
-	transform: translate3d(calc(30vw - 24px), 0, 0) rotateY(180deg);
+.spin
+{
+    transform: translate3d(calc(30vw - 24px), 0, 0) rotateY(180deg);
 }
 
-#chevron {
-	background-color: #0D0;
-	text-align: center;
-	width: 39px;
-	border-radius: 39px;
-	font-size: 2em;
-	text-decoration: none;
-	position: fixed;
-	top: calc(50vh - 19px);
-	left: 0;
-	z-index: 2;
-	transition-property: transform;
-	transition-duration: 1.1s;
-	transition-timing-function: ease;
-	will-change: transform;
+#chevron
+{
+    font-size: 2em;
+
+    position: fixed;
+    z-index: 2;
+    top: calc(50vh - 19px);
+    left: 0;
+
+    width: 39px;
+
+    transition-timing-function: ease;
+    transition-duration: 1.1s;
+    transition-property: transform;
+    text-align: center;
+    text-decoration: none;
+
+    border-radius: 39px;
+    background-color: #0d0;
+
+    will-change: transform;
 }
 
-#list-view {
-	background-color: #EEE;
-	list-style: none;
-	list-style-image: none;
-	list-style-type: none;
-	width: calc(30vw - 40px);
-	margin: 0;
-	padding-left: 10px;
-	border-radius: 0 20px 0 0;
+#list-view
+{
+    width: calc(30vw - 40px);
+    margin: 0;
+    padding-left: 10px;
+
+    list-style: none;
+    list-style-type: none;
+    list-style-image: none;
+
+    border-radius: 0 20px 0 0;
+    background-color: #eee;
 }
 
-.list-item {
-	padding: 12px 0 12px 0;
+.list-item
+{
+    padding: 12px 0 12px 0;
 }
 
-#filter {
-	background: #EEE;
-	width: calc(30vw - 50px);
-	height: 64px;
-	margin: 10px 0 10px 0;
-	padding: 10px;
-	display: flex;
-	flex-wrap: wrap;
+#filter
+{
+    display: flex;
+
+    width: calc(30vw - 50px);
+    height: 64px;
+    margin: 10px 0 10px 0;
+    padding: 10px;
+
+    background: #eee;
+
+    flex-wrap: wrap;
 }
 
-.text-search {
-	width: 100%;
+.text-search
+{
+    width: 100%;
 }
 
-.text-field {
-	width: 75%;
-	height: 20px;
+.text-field
+{
+    width: 75%;
+    height: 20px;
 }
 
-.attributions {
-	display: flex;
-	flex-wrap: wrap;
-	background-color: #EEE;
-	width: 100px;
-	position: fixed;
-	z-index: 3;
-	top: 0;
-	right: 0;
+.attributions
+{
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    right: 0;
+
+    display: flex;
+
+    width: 100px;
+
+    background-color: #eee;
+
+    flex-wrap: wrap;
 }
 
-.attributions img {
-	margin: 5px 0 5px 0;
-	width: 100%;
-	height: 50%;
+.attributions img
+{
+    width: 100%;
+    height: 50%;
+    margin: 5px 0 5px 0;
 }
 
-@media only screen and (max-width: 520px) {
-	#sidebar {
-		width: 60vw;
-		position: absolute;
-		left: calc(-60vw + 24px);
-	}
-	.slide {
-		transform: translate3d(calc(60vw - 24px), 0, 0);
-	}
-	.spin {
-		transform: translate3d(calc(60vw - 24px), 0, 0) rotateY(180deg);
-	}
-	#list-view {
-		width: calc(60vw - 40px);
-	}
-	#filter {
-		width: calc(60vw - 50px);
-	}
+@media only screen and (max-width: 520px)
+{
+    #sidebar
+    {
+        position: absolute;
+        left: calc(-60vw + 24px);
+
+        width: 60vw;
+    }
+    .slide
+    {
+        transform: translate3d(calc(60vw - 24px), 0, 0);
+    }
+    .spin
+    {
+        transform: translate3d(calc(60vw - 24px), 0, 0) rotateY(180deg);
+    }
+    #list-view
+    {
+        width: calc(60vw - 40px);
+    }
+    #filter
+    {
+        width: calc(60vw - 50px);
+    }
 }
