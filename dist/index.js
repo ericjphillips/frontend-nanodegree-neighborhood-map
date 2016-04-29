@@ -3,7 +3,7 @@ var express = require('express');
 var request = require('request');
 
 //initialize a local server on project directory
-var port = process.env.PORT || 8080
+var port = process.env.PORT || 8080;
 var server = express();
 server.set('port', port);
 server.use(express.static(__dirname));
