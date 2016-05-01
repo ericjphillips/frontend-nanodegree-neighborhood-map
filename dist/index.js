@@ -2,10 +2,9 @@
 var express = require('express');
 var request = require('request');
 
-//initialize a local server on project directory
-var port = process.env.PORT || 8080;
+//initialize a local server on project directory, listening on port 8080
 var server = express();
-server.set('port', port);
+server.set('port', 8080);
 server.use(express.static(__dirname));
 server.listen(server.get('port'), function () {
 	'use strict';
