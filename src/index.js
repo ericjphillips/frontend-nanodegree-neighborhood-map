@@ -11,11 +11,12 @@ server.listen(server.get('port'), function () {
 })
 
 // URL string pointing to the BreweryDB API endpoint querying all Vermont breweries
-var brewerydbURL = 'https://api.brewerydb.com/v2/locations?region=Vermont&order=name&sort=ASC&key=47f825b1668bd879c371d39ec0abbcf4&format=json'
+var brewerydbURL =
+`https://api.brewerydb.com/v2/locations?region=Vermont&order=name&sort=ASC&key=${process.env.BREWDB_KEY}&format=json`
 
 var untappdOAuth = {
-  client_id: '33F245D792EDB200715AC09193096EE41450F51F',
-  client_secret: 'EE12D87862B5FA959C68C57B362CE9724A828DFC'
+  client_id: process.env.UNTAPPD_ID,
+  client_secret: process.env.UNTAPPD_SECRET
 }
 
 console.log('Forwarding API requests')
