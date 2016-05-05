@@ -17,8 +17,8 @@
       <img src="img/pbu_160_yellow.png" alt="Untappd logo">
     </a>
   </div>
-  <a href="#" id="chevron">⟫</a>
-  <div id="sidebar">
+  <a href="#" id="menuButton" data-bind="click: toggleMenu">⟫</a>
+  <div id="menuArea">
     <form id="filter">
       <div class="text-search">
         <select data-bind="value: filterby">
@@ -39,7 +39,6 @@
     </ul>
   </div>
   <div id="map"></div>
-  <script src="js/jquery-2.2.3.min.js"></script>
   <script src="js/knockout-3.4.0.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWaVy6rnLhpV--H6VZOBeP3LhBHcFYoE&libraries=places&callback=initMap" onerror="googleError()"></script>
   <script src="js/app.js"></script>

@@ -1,16 +1,26 @@
-var $, google, map, ko
+var google, map, ko
+
+var menuElements = [document.getElementById('menuButton'), document.getElementById('menuArea')]
 
 var viewModel = {
-  center: {
-    lat: 43.9753,
-    lng: -72.5623
-  },
+  center:
+    {
+      lat: 43.9753,
+      lng: -72.5623
+    },
   brewery: ko.observableArray([]),
   filterby: ko.observable(''),
   open2Public: ko.observable(false),
   keywords: ko.observable(''),
-  infowindow: {}
+  infowindow: {},
+  toggleMenu: function () {
+    menuElements.forEach(function (item) {
+      item.classList.toggle('slide')
+    })
+  }
 }
+
+var untappdSearch = new XMLHttpRequest()
 
 // method to move the map's infowindow and update its content.
 // takes a brewery as an argument
@@ -23,82 +33,52 @@ viewModel.infoWindowChange = function (brewery) {
   viewModel.infowindow.close()
   viewModel.infowindow.setOptions(
     {
-      content: 'Loading: <i class="fa fa-beer fa-spin"></i>',
+      content: 'Loading: ...',
       position: brewery.marker.position
     }
   )
   viewModel.infowindow.open(map)
-  brewery.marker.setAnimation(google.maps.Animation.BOUNCE)
-
-	// Two calls to Untappd: a search for the brewery, then details for the top result
-
-	// The call goes to /untappd/ which is our Node.js server, which does the actualy query to Untappd API
-
-  // Todo (move this logic to index.js, there's no reason to do this on the client)
-  $.getJSON('/untappd/search?q=' + brewery.brewery.name, function (search) {
-    if (search.response.brewery.items[0] !== undefined) {
-      $.getJSON('/untappd/brewery?brewery_id=' + search.response.brewery.items[0].brewery.brewery_id, function (details) {
-        var content = ''
-        var bestRated
-        brewery.untappd = details.response.brewery
-        content += '<img src="' + brewery.untappd.brewery_label + '">'
-        content += '<h1>' + brewery.untappd.brewery_name + '</h1>'
-        if (brewery.hasOwnProperty('established')) {
-          content += '<p> est. ' + brewery.established + '</p>'
-        }
-        if (brewery.untappd.hasOwnProperty('brewery_description')) {
-          content += '<p>' + brewery.untappd.brewery_description + '</p>'
-        }
-        content += '<p>'
-        if (brewery.untappd.contact.url.length > 0) {
-          content += '<a href="' + brewery.untappd.contact.url + '" target="_blank">' + brewery.untappd.contact.url + '</a> '
-        }
-        if (brewery.untappd.contact.facebook.length > 0) {
-          content += '<a href="' + brewery.untappd.contact.facebook + '" target="_blank"><i class="fa fa-facebook-official"></i></a> '
-        }
-        if (brewery.untappd.contact.instagram.length > 0) {
-          content += '<a href="https://www.instagram.com/' + brewery.untappd.contact.instagram + '" target="_blank"><i class="fa fa-instagram"></i></a> '
-        }
-        if (brewery.untappd.contact.twitter.length > 0) {
-          content += '<a href="https://twitter.com/' + brewery.untappd.contact.twitter + '" target="_blank"><i class="fa fa-twitter"></i></a>'
-        }
-        if (brewery.untappd.beer_list.items.length > 0) {
-          content += '</p>'
-          content += '<p>Beer enthusiasts on Untappd really like the '
-          bestRated = brewery.untappd.beer_list.items.reduce(function (prev, curr) {
-            return (prev.beer.rating_score > curr.beer.rating_score) ? prev : curr
-          })
-          content += '<a href="https://untappd.com/beer/' + bestRated.beer.bid + '" target="_blank">' + bestRated.beer.beer_name + '</a>'
-        }
-        viewModel.infowindow.setOptions(
-          {
-            content: content,
-            position: brewery.marker.position
-          }
-        )
-        viewModel.infowindow.open(map)
-        brewery.marker.setAnimation(null)
-      })
-    } else {
-      var content = ''
-      content += '<h1>' + brewery.brewery.name + '</h1>'
-      if (brewery.hasOwnProperty('established')) {
-        content += '<p> est. ' + brewery.established + '</p>'
-      }
-      if (brewery.hasOwnProperty('website')) {
-        content += '<p><a href="' + brewery.website + '">' + brewery.website + '</a></p>'
-      }
-      if (brewery.hasOwnProperty('description')) {
-        content += '<p>' + brewery.description + '</p>'
-      }
-      viewModel.infowindow.setOptions(
-        {
-          content: content
-        }
-      )
-      brewery.marker.setAnimation(null)
+  untappdSearch.open('GET', '/untappd/?q=' + brewery.brewery.name, true)
+  untappdSearch.send()
+  untappdSearch.onreadystatechange = function () {
+    brewery.untappd = JSON.parse(untappdSearch.responseText).response.brewery
+    var content = ''
+    var bestRated
+    content += '<img src="' + brewery.untappd.brewery_label + '">'
+    content += '<h1>' + brewery.untappd.brewery_name + '</h1>'
+    if (brewery.hasOwnProperty('established')) {
+      content += '<p> est. ' + brewery.established + '</p>'
     }
-  })
+    if (brewery.untappd.hasOwnProperty('brewery_description')) {
+      content += '<p>' + brewery.untappd.brewery_description + '</p>'
+    }
+    content += '<p>'
+    if (brewery.untappd.contact.url.length > 0) {
+      content += '<a href="' + brewery.untappd.contact.url + '" target="_blank">' + brewery.untappd.contact.url + '</a> '
+    }
+    if (brewery.untappd.contact.facebook.length > 0) {
+      content += '<a href="' + brewery.untappd.contact.facebook + '" target="_blank">Facebook</a> '
+    }
+    if (brewery.untappd.contact.instagram.length > 0) {
+      content += '<a href="https://www.instagram.com/' + brewery.untappd.contact.instagram + '" target="_blank">Instagram</a> '
+    }
+    if (brewery.untappd.contact.twitter.length > 0) {
+      content += '<a href="https://twitter.com/' + brewery.untappd.contact.twitter + '" target="_blank">Twitter</a>'
+    }
+    if (brewery.untappd.beer_list.items.length > 0) {
+      content += '</p>'
+      content += '<p>Beer enthusiasts on Untappd really like the '
+      bestRated = brewery.untappd.beer_list.items.reduce(function (prev, curr) {
+        return (prev.beer.rating_score > curr.beer.rating_score) ? prev : curr
+      })
+      content += '<a href="https://untappd.com/beer/' + bestRated.beer.bid + '" target="_blank">' + bestRated.beer.beer_name + '</a>'
+    }
+    viewModel.infowindow.setOptions(
+      {
+        content: content
+      }
+    )
+  }
 }
 
 // This utility function doesn't ship with the minified version of Knockout!
@@ -185,49 +165,36 @@ viewModel.listView = ko.computed(function () {
 })
 
 // AJAX request to BreweryDB for all breweries in the state of Vermont
-$.ajax(
-  {
-    type: 'GET',
-    dataType: 'json',
-    // the client makes a request to the Node.js server, which does the actual request to BreweryDB
-    url: '/brewDB/',
-    success: function (response) {
-		// Here's where we handle a successful response.
-		// Iterates through the response and builds a model object for each brewery.
-		// Adds a Google Maps marker with event listener to each.
-		// Pushes the model to the viewModel observable array.
-		// Checks if that was the last brewery in the array, and if so performs a sort by name on the viewModel data.
-      'use strict'
-      response.data.forEach(function (brewery) {
-        var model = brewery
-        model.marker = new google.maps.Marker(
-          {
-            position: {
-              lat: model.latitude,
-              lng: model.longitude
-            },
-            map: map,
-            title: model.brewery.name
-          }
-        )
-        model.marker.addListener('click', function () {
-          viewModel.infoWindowChange(model)
-        })
-        viewModel.brewery.push(model)
-        if (response.data.indexOf(brewery) === response.data.length - 1) {
-          viewModel.brewery.sort(function (left, right) {
-            return left.brewery.name === right.brewery.name ? 0 : (left.brewery.name < right.brewery.name ? -1 : 1)
-          })
-        }
-      })
-    },
+var breweriesRequest = new XMLHttpRequest()
 
-    error: function () {
-      'use strict'
-      window.alert('Oh no. No brewery data available. Please check your connection.')
+breweriesRequest.open('GET', '/brewerydb/', true)
+breweriesRequest.onreadystatechange = function () {
+  'use strict'
+  var brewModel = JSON.parse(breweriesRequest.responseText).data
+  brewModel.forEach(function (brewery) {
+    var model = brewery
+    model.marker = new google.maps.Marker(
+      {
+        position:
+        {
+          lat: model.latitude,
+          lng: model.longitude
+        },
+        map: map,
+        title: model.brewery.name
+      }
+    )
+    model.marker.addListener('click', function () {
+      viewModel.infoWindowChange(model)
+    })
+    viewModel.brewery.push(model)
+    if (brewModel.indexOf(brewery) === brewModel.length - 1) {
+      viewModel.brewery.sort(function (left, right) {
+        return left.brewery.name === right.brewery.name ? 0 : (left.brewery.name < right.brewery.name ? -1 : 1)
+      })
     }
-  }
-)
+  })
+}
 
 // Google Maps callback function
 // Executes when async response completes
@@ -244,6 +211,7 @@ function initMap () {
       pixelOffset: new google.maps.Size(0, -30)
     }
   )
+  breweriesRequest.send()
 }
 // todo (add more graceful error handling)
 function googleError () {
@@ -253,15 +221,3 @@ function googleError () {
 
 // apply bindings
 ko.applyBindings(viewModel)
-
-// add click event to slide the menu -- todo (use Knockout binding)
-var chevron = document.getElementById('chevron')
-var sidebar = document.getElementById('sidebar')
-
-function slide () {
-  'use strict'
-  sidebar.classList.toggle('slide')
-  chevron.classList.toggle('spin')
-}
-
-chevron.addEventListener('click', slide)

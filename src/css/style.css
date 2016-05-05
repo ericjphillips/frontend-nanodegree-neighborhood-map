@@ -21,7 +21,7 @@ a:active {
   margin-left: 24px;
 }
 
-#sidebar {
+#menuArea {
   position: absolute;
   z-index: 1;
   left: calc(-30vw + 24px);
@@ -43,7 +43,7 @@ a:active {
   transform: translate3d(calc(30vw - 24px), 0, 0) rotateY(180deg);
 }
 
-#chevron {
+#menuButton {
   font-size: 2em;
   position: fixed;
   z-index: 2;

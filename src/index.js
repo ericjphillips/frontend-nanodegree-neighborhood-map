@@ -19,39 +19,44 @@ var untappdOAuth = {
   client_secret: process.env.UNTAPPD_SECRET
 }
 
+var untappdURL = 'https://api.untappd.com/v4'
+
+var brewModel
+request.get(brewerydbURL, (error, response, body) => {
+  brewModel = body
+})
+
 console.log('Forwarding API requests')
 
-// listen for any requests made to /brewDB/
-// when a request comes through, pipe it to the request function
-// make the query to the BreweryDB API, and pipe THAT response back to client
-server.all('/brewDB/', function (req, res) {
-  console.log('AJAX request made to BreweryDB')
-  req.pipe(request(
-    {
-      url: brewerydbURL,
-      method: req.method
-    }
-)).pipe(res)
+server.all('/brewerydb/', function (req, res) {
+  res.send(brewModel)
 })
 
-// These two routes work the same way, but query Untappd for a search or for brewery details
-server.all('/untappd/search/', function (req, res) {
+server.all('/untappd/', function (req, res) {
   console.log('AJAX request made to Untappd - search for ' + req.query.q)
-  req.pipe(request(
-    {
-      url: 'https://api.untappd.com/v4/search/brewery?client_id=' + untappdOAuth.client_id + '&client_secret=' + untappdOAuth.client_secret,
-      qs: req.query,
-      method: req.method
-    }
-  )).pipe(res)
+  searchBreweryByName(req.query.q)
+  .then(id => searchBreweryById(id))
+  .then(details =>
+    res.send(details))
 })
 
-server.all('/untappd/brewery/', function (req, res) {
-  var url = 'https://api.untappd.com/v4/brewery/info/' + req.query.brewery_id + '?client_id=' + untappdOAuth.client_id + '&client_secret=' + untappdOAuth.client_secret
-  req.pipe(request(
-    {
-      url: url,
-      method: req.method
-    }
-  )).pipe(res)
-})
+function searchBreweryByName (query) {
+  return new Promise(function (resolve, reject) {
+    request.get(`${untappdURL}/search/brewery?client_id=${untappdOAuth.client_id}&client_secret=${untappdOAuth.client_secret}&q=${query}`, function (error, response, body) {
+      let data = JSON.parse(body)
+      if (data.response.brewery.items[0]) {
+        resolve(data.response.brewery.items[0].brewery.brewery_id)
+      } else {
+        reject('No Untappd information available for that brewery')
+      }
+    })
+  })
+}
+
+function searchBreweryById (id) {
+  return new Promise(function (resolve, reject) {
+    request.get(`${untappdURL}/brewery/info/${id}?client_id=${untappdOAuth.client_id}&client_secret=${untappdOAuth.client_secret}`, function (error, response, body) {
+      resolve(body)
+    })
+  })
+}
