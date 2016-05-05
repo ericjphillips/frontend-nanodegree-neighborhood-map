@@ -2,7 +2,7 @@
 var express = require('express')
 var request = require('request')
 
-// initialize a local server, listening on default Heroku port or 8080
+// initialize a server, listening on default Heroku port or 8080
 var server = express()
 server.set('port', process.env.PORT || 8080)
 server.use(express.static(__dirname))
@@ -14,22 +14,18 @@ server.listen(server.get('port'), function () {
 var brewerydbURL =
 `https://api.brewerydb.com/v2/locations?region=Vermont&order=name&sort=ASC&key=${process.env.BREWDB_KEY}&format=json`
 
+var untappdURL = 'https://api.untappd.com/v4'
 var untappdOAuth = {
   client_id: process.env.UNTAPPD_ID,
   client_secret: process.env.UNTAPPD_SECRET
 }
 
-var untappdURL = 'https://api.untappd.com/v4'
-
-var brewModel
-request.get(brewerydbURL, (error, response, body) => {
-  brewModel = body
-})
-
 console.log('Forwarding API requests')
 
 server.all('/brewerydb/', function (req, res) {
-  res.send(brewModel)
+  request.get(brewerydbURL, (error, response, body) => {
+    res.send(body)
+  })
 })
 
 server.all('/untappd/', function (req, res) {
