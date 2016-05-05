@@ -43,7 +43,7 @@ server.all('/untappd/', function (req, res) {
 function searchBreweryByName (query) {
   return new Promise(function (resolve, reject) {
     request.get(`${untappdURL}/search/brewery?client_id=${untappdOAuth.client_id}&client_secret=${untappdOAuth.client_secret}&q=${query}`, function (error, response, body) {
-      let data = JSON.parse(body)
+      var data = JSON.parse(body)
       if (data.response.brewery.items[0]) {
         resolve(data.response.brewery.items[0].brewery.brewery_id)
       } else {
