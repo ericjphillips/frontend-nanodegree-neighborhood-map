@@ -1,7 +1,5 @@
 var google, map, ko
 
-var menuElements = [document.getElementById('menuButton'), document.getElementById('menuArea')]
-
 var viewModel = {
   center:
     {
@@ -13,10 +11,12 @@ var viewModel = {
   open2Public: ko.observable(false),
   keywords: ko.observable(''),
   infowindow: {},
+  menuButton: document.getElementById('menuButton'),
+  menuArea: document.getElementById('menuArea'),
   toggleMenu: function () {
-    menuElements.forEach(function (item) {
-      item.classList.toggle('slide')
-    })
+    this.menuButton.classList.toggle('slide')
+    this.menuButton.classList.toggle('spin')
+    this.menuArea.classList.toggle('slide')
   }
 }
 
@@ -29,7 +29,6 @@ var untappdSearch = new XMLHttpRequest()
 // assembles infowindow content from available information
 // uses the infoWindow setOptions method to change its content and position, then open it on the map
 viewModel.infoWindowChange = function (brewery) {
-  'use strict'
   viewModel.infowindow.close()
   viewModel.infowindow.setOptions(
     {
@@ -37,6 +36,7 @@ viewModel.infoWindowChange = function (brewery) {
       position: brewery.marker.position
     }
   )
+  brewery.marker.setAnimation(google.maps.Animation.BOUNCE)
   viewModel.infowindow.open(map)
   untappdSearch.open('GET', '/untappd/?q=' + brewery.brewery.name, true)
   untappdSearch.send()
@@ -78,6 +78,7 @@ viewModel.infoWindowChange = function (brewery) {
         content: content
       }
     )
+    brewery.marker.setAnimation(null)
   }
 }
 
@@ -100,68 +101,16 @@ viewModel.listView = ko.computed(function () {
   var open2Public = viewModel.open2Public()
   var keywords = viewModel.keywords().toLowerCase()
   var filter = viewModel.filterby()
-  if (!keywords && !open2Public) {
-    viewModel.brewery().forEach(function (item) {
+  return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
+    var check = filter === 'Name' ? item.brewery.name : item.locality
+    if (ko.utils.stringContains(check.toLowerCase(), keywords) && (!open2Public || item.openToPublic === 'Y')) {
       item.marker.setVisible(true)
-    })
-    return viewModel.brewery()
-  } else if (!keywords && open2Public) {
-    return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-      if (item.openToPublic === 'Y') {
-        item.marker.setVisible(true)
-        return true
-      } else {
-        item.marker.setVisible(false)
-        return false
-      }
-    })
-  } else {
-    switch (filter) {
-      case 'Name': if (open2Public) {
-        return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-          if (ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords) && item.openToPublic === 'Y') {
-            item.marker.setVisible(true)
-            return true
-          } else {
-            item.marker.setVisible(false)
-            return false
-          }
-        })
-      } else {
-        return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-          if (ko.utils.stringContains(item.brewery.name.toLowerCase(), keywords)) {
-            item.marker.setVisible(true)
-            return true
-          } else {
-            item.marker.setVisible(false)
-            return false
-          }
-        })
-      }
-
-      case 'Location': if (open2Public) {
-        return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-          if (ko.utils.stringContains(item.locality.toLowerCase(), keywords) && item.openToPublic === 'Y') {
-            item.marker.setVisible(true)
-            return true
-          } else {
-            item.marker.setVisible(false)
-            return false
-          }
-        })
-      } else {
-        return ko.utils.arrayFilter(viewModel.brewery(), function (item) {
-          if (ko.utils.stringContains(item.locality.toLowerCase(), keywords)) {
-            item.marker.setVisible(true)
-            return true
-          } else {
-            item.marker.setVisible(false)
-            return false
-          }
-        })
-      }
+      return true
+    } else {
+      item.marker.setVisible(false)
+      return false
     }
-  }
+  })
 })
 
 // AJAX request to BreweryDB for all breweries in the state of Vermont
@@ -169,7 +118,6 @@ var breweriesRequest = new XMLHttpRequest()
 
 breweriesRequest.open('GET', '/brewerydb/', true)
 breweriesRequest.onreadystatechange = function () {
-  'use strict'
   var brewModel = JSON.parse(breweriesRequest.responseText).data
   brewModel.forEach(function (brewery) {
     var model = brewery
@@ -199,7 +147,6 @@ breweriesRequest.onreadystatechange = function () {
 // Google Maps callback function
 // Executes when async response completes
 function initMap () {
-  'use strict'
   map = new google.maps.Map(document.getElementById('map'), {
     center: viewModel.center,
     zoom: 8
