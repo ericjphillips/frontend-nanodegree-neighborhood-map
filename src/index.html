@@ -9,39 +9,38 @@
 </head>
 
 <body>
-  <div class="attributions">
-    <a href="http://www.brewerydb.com">
-      <img class="brewerydb" src="img/Powered-By-BreweryDB.png" alt="Brewery DB logo">
-    </a>
-    <a href="https://untappd.com/">
-      <img src="img/pbu_160_yellow.png" alt="Untappd logo">
-    </a>
-  </div>
-  <a href="#" id="menuButton" data-bind="click: toggleMenu">⟫</a>
-  <div id="menuArea">
-    <form id="filter">
-      <div class="text-search">
+  <header>
+    <a href="http://www.brewerydb.com"><img class="brewerydb" src="img/Powered-By-BreweryDB.png" alt="Brewery DB logo"></a>
+    <a href="https://untappd.com/"><img src="img/pbu_160_yellow.png" alt="Untappd logo"></a>
+  </header>
+
+  <a href="#" id="menuButton" class="button__menu" data-bind="click: toggleMenu">&gt;</a>
+  <main id="menuArea" class="sidebar__menu">
+    <form>
+      <div class="form__filter">
         <select data-bind="value: filterby">
           <option value="Name" selected>Name</option>
           <option value="Location">City</option>
         </select>
         <input class="text-field" type="text" data-bind="textInput: keywords">
       </div>
-      <div>
-        <label for="public">open to the public</label>
-        <input id="public" type="checkbox" data-bind="checked: open2Public">
-      </div>
+      <label for="public"><input id="public" type="checkbox" data-bind="checked: open2Public">
+        (show only breweries that are open to the public)
+      </label>
     </form>
+
     <ul id="list-view" data-bind="foreach: listView">
-      <li class="list-item">
+      <li>
         <a href="#" data-bind="text: brewery.name, click: $parent.infoWindowChange"></a> -<em><span data-bind="text: locality"></span></em>
       </li>
     </ul>
-  </div>
-  <div id="map"></div>
+  </main>
+
+  <div id="map" class="mapContainer"></div>
+
   <script src="js/knockout-3.4.0.js"></script>
   <script src="js/app.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWaVy6rnLhpV--H6VZOBeP3LhBHcFYoE&libraries=places&callback=initMap" onerror="googleError()"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWaVy6rnLhpV--H6VZOBeP3LhBHcFYoE&amp;libraries=places&amp;callback=initMap" onerror="googleError()"></script>
 
 </body>
 
