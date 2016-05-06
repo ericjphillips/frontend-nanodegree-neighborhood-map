@@ -22,10 +22,16 @@ var untappdOAuth = {
 
 console.log('Forwarding API requests')
 
-server.all('/brewerydb/', function (req, res) {
-  request.get(brewerydbURL, (error, response, body) => {
-    res.send(body)
+function getAllVtBreweries () {
+  return new Promise(function (resolve, reject) {
+    request.get(brewerydbURL, (error, response, body) => {
+      resolve(body)
+    })
   })
+}
+
+server.all('/brewerydb/', function (req, res) {
+  getAllVtBreweries().then(model => res.send(model))
 })
 
 server.all('/untappd/', function (req, res) {
